@@ -1,0 +1,570 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<ui version="4.0">
+ <class>MainWindow</class>
+ <widget class="QMainWindow" name="MainWindow">
+  <property name="geometry">
+   <rect>
+    <x>0</x>
+    <y>0</y>
+    <width>800</width>
+    <height>600</height>
+   </rect>
+  </property>
+  <property name="windowTitle">
+   <string>MainWindow</string>
+  </property>
+  <widget class="QWidget" name="centralwidget">
+   <layout class="QHBoxLayout" name="horizontalLayout">
+    <property name="spacing">
+     <number>0</number>
+    </property>
+    <property name="leftMargin">
+     <number>0</number>
+    </property>
+    <property name="topMargin">
+     <number>0</number>
+    </property>
+    <property name="rightMargin">
+     <number>0</number>
+    </property>
+    <property name="bottomMargin">
+     <number>0</number>
+    </property>
+    <item>
+     <widget class="QWidget" name="widget_3" native="true">
+      <property name="minimumSize">
+       <size>
+        <width>60</width>
+        <height>0</height>
+       </size>
+      </property>
+      <property name="maximumSize">
+       <size>
+        <width>60</width>
+        <height>16777215</height>
+       </size>
+      </property>
+      <property name="styleSheet">
+       <string notr="true">border-left:1px solid #C4D2F7;
+border-top:1px solid #C4D2F7;
+border-bottom:1px solid #C4D2F7;
+border-right:0;
+border-top-left-radius:12px;
+border-top-right-radius:0;
+border-bottom-left-radius:12px;
+border-bottom-right-radius:0;
+background:#C4D2F7;</string>
+      </property>
+      <layout class="QVBoxLayout" name="verticalLayout_5">
+       <item>
+        <widget class="QWidget" name="widget_10" native="true">
+         <layout class="QVBoxLayout" name="verticalLayout">
+          <property name="leftMargin">
+           <number>0</number>
+          </property>
+          <property name="topMargin">
+           <number>0</number>
+          </property>
+          <property name="rightMargin">
+           <number>0</number>
+          </property>
+          <property name="bottomMargin">
+           <number>0</number>
+          </property>
+          <item>
+           <widget class="QPushButton" name="pushButton">
+            <property name="minimumSize">
+             <size>
+              <width>40</width>
+              <height>40</height>
+             </size>
+            </property>
+            <property name="maximumSize">
+             <size>
+              <width>40</width>
+              <height>40</height>
+             </size>
+            </property>
+            <property name="styleSheet">
+             <string notr="true">QPushButton{
+    border-radius: 8px;
+    padding: 4px 4px;
+    text-align: center;
+    text-decoration: none;
+    margin: 4px 2px;
+	background:white;
+    color: black;
+    border: 2px solid white;
+}
+QPushButton:hover {
+    border: 2px solid #cbcbcb;
+    background-color: #cbcbcb;
+}
+QPushButton:checked {
+ 	border: 2px solid #8470FF;
+    background-color:  #8470FF;
+	color: white;
+}
+QPushButton:pressed {
+    background-color: #6A5ACD;
+	border: 2px solid #6A5ACD;
+}</string>
+            </property>
+            <property name="text">
+             <string>C</string>
+            </property>
+            <property name="checkable">
+             <bool>true</bool>
+            </property>
+            <property name="autoExclusive">
+             <bool>true</bool>
+            </property>
+           </widget>
+          </item>
+          <item>
+           <widget class="QPushButton" name="pushButton_2">
+            <property name="minimumSize">
+             <size>
+              <width>40</width>
+              <height>40</height>
+             </size>
+            </property>
+            <property name="maximumSize">
+             <size>
+              <width>40</width>
+              <height>40</height>
+             </size>
+            </property>
+            <property name="styleSheet">
+             <string notr="true">QPushButton{
+    border-radius: 8px;
+    padding: 4px 4px;
+    text-align: center;
+    text-decoration: none;
+    margin: 4px 2px;
+	background:white;
+    color: black;
+    border: 2px solid white;
+}
+QPushButton:hover {
+    border: 2px solid #cbcbcb;
+    background-color: #cbcbcb;
+}
+QPushButton:checked {
+ 	border: 2px solid #8470FF;
+    background-color:  #8470FF;
+	color: white;
+}
+QPushButton:pressed {
+    background-color: #6A5ACD;
+	border: 2px solid #6A5ACD;
+}</string>
+            </property>
+            <property name="text">
+             <string>L</string>
+            </property>
+            <property name="checkable">
+             <bool>true</bool>
+            </property>
+            <property name="autoExclusive">
+             <bool>true</bool>
+            </property>
+           </widget>
+          </item>
+          <item>
+           <widget class="QPushButton" name="pushButton_3">
+            <property name="minimumSize">
+             <size>
+              <width>40</width>
+              <height>40</height>
+             </size>
+            </property>
+            <property name="maximumSize">
+             <size>
+              <width>40</width>
+              <height>40</height>
+             </size>
+            </property>
+            <property name="styleSheet">
+             <string notr="true">QPushButton{
+    border-radius: 8px;
+    padding: 4px 4px;
+    text-align: center;
+    text-decoration: none;
+    margin: 4px 2px;
+	background:white;
+    color: black;
+    border: 2px solid white;
+}
+QPushButton:hover {
+    border: 2px solid #cbcbcb;
+    background-color: #cbcbcb;
+}
+QPushButton:checked {
+ 	border: 2px solid #8470FF;
+    background-color:  #8470FF;
+	color: white;
+}
+QPushButton:pressed {
+    background-color: #6A5ACD;
+	border: 2px solid #6A5ACD;
+}</string>
+            </property>
+            <property name="text">
+             <string>O</string>
+            </property>
+            <property name="checkable">
+             <bool>true</bool>
+            </property>
+            <property name="autoExclusive">
+             <bool>true</bool>
+            </property>
+           </widget>
+          </item>
+          <item>
+           <widget class="QPushButton" name="pushButton_6">
+            <property name="minimumSize">
+             <size>
+              <width>40</width>
+              <height>40</height>
+             </size>
+            </property>
+            <property name="maximumSize">
+             <size>
+              <width>40</width>
+              <height>40</height>
+             </size>
+            </property>
+            <property name="styleSheet">
+             <string notr="true">QPushButton{
+    border-radius: 8px;
+    padding: 4px 4px;
+    text-align: center;
+    text-decoration: none;
+    margin: 4px 2px;
+	background:white;
+    color: black;
+    border: 2px solid white;
+}
+QPushButton:hover {
+    border: 2px solid #cbcbcb;
+    background-color: #cbcbcb;
+}
+QPushButton:checked {
+ 	border: 2px solid #8470FF;
+    background-color:  #8470FF;
+	color: white;
+}
+QPushButton:pressed {
+    background-color: #6A5ACD;
+	border: 2px solid #6A5ACD;
+}</string>
+            </property>
+            <property name="text">
+             <string>H</string>
+            </property>
+            <property name="checkable">
+             <bool>true</bool>
+            </property>
+            <property name="autoExclusive">
+             <bool>true</bool>
+            </property>
+           </widget>
+          </item>
+          <item>
+           <spacer name="verticalSpacer">
+            <property name="orientation">
+             <enum>Qt::Vertical</enum>
+            </property>
+            <property name="sizeHint" stdset="0">
+             <size>
+              <width>20</width>
+              <height>395</height>
+             </size>
+            </property>
+           </spacer>
+          </item>
+         </layout>
+        </widget>
+       </item>
+      </layout>
+     </widget>
+    </item>
+    <item>
+     <widget class="QWidget" name="widget_6" native="true">
+      <property name="styleSheet">
+       <string notr="true">border-left:1px solid #F2F6FF;
+border-top:1px solid #F2F6FF;
+border-bottom:1px solid #F2F6FF;
+border-right:1px solid #F2F6FF;
+border-top-left-radius:0;
+border-top-right-radius:12px;
+border-bottom-left-radius:0;
+border-bottom-right-radius:12px;
+background:#F2F6FF;</string>
+      </property>
+      <layout class="QVBoxLayout" name="verticalLayout_4">
+       <property name="spacing">
+        <number>0</number>
+       </property>
+       <property name="leftMargin">
+        <number>0</number>
+       </property>
+       <property name="topMargin">
+        <number>1</number>
+       </property>
+       <property name="bottomMargin">
+        <number>1</number>
+       </property>
+       <item>
+        <widget class="QWidget" name="widget_4" native="true">
+         <property name="minimumSize">
+          <size>
+           <width>0</width>
+           <height>30</height>
+          </size>
+         </property>
+         <property name="maximumSize">
+          <size>
+           <width>16777215</width>
+           <height>40</height>
+          </size>
+         </property>
+         <property name="styleSheet">
+          <string notr="true">border-radius:0;
+border:0;</string>
+         </property>
+         <layout class="QHBoxLayout" name="horizontalLayout_2">
+          <property name="spacing">
+           <number>0</number>
+          </property>
+          <property name="leftMargin">
+           <number>0</number>
+          </property>
+          <property name="topMargin">
+           <number>0</number>
+          </property>
+          <property name="rightMargin">
+           <number>0</number>
+          </property>
+          <property name="bottomMargin">
+           <number>0</number>
+          </property>
+          <item>
+           <widget class="QWidget" name="widget_8" native="true">
+            <property name="styleSheet">
+             <string notr="true">border-radius:0;
+border:0;</string>
+            </property>
+            <layout class="QHBoxLayout" name="horizontalLayout_5">
+             <item>
+              <widget class="QLabel" name="label">
+               <property name="styleSheet">
+                <string notr="true">QLabel{
+	font-size:14px;
+	font-weight: bold;
+};</string>
+               </property>
+               <property name="text">
+                <string>Class</string>
+               </property>
+               <property name="alignment">
+                <set>Qt::AlignRight|Qt::AlignTrailing|Qt::AlignVCenter</set>
+               </property>
+              </widget>
+             </item>
+             <item>
+              <widget class="QLabel" name="label_2">
+               <property name="text">
+                <string>(Student num)</string>
+               </property>
+              </widget>
+             </item>
+             <item>
+              <spacer name="horizontalSpacer_2">
+               <property name="orientation">
+                <enum>Qt::Horizontal</enum>
+               </property>
+               <property name="sizeHint" stdset="0">
+                <size>
+                 <width>40</width>
+                 <height>20</height>
+                </size>
+               </property>
+              </spacer>
+             </item>
+            </layout>
+           </widget>
+          </item>
+          <item>
+           <widget class="QWidget" name="widget_9" native="true">
+            <property name="minimumSize">
+             <size>
+              <width>200</width>
+              <height>0</height>
+             </size>
+            </property>
+            <property name="maximumSize">
+             <size>
+              <width>200</width>
+              <height>16777215</height>
+             </size>
+            </property>
+            <layout class="QHBoxLayout" name="horizontalLayout_4">
+             <property name="leftMargin">
+              <number>0</number>
+             </property>
+             <property name="topMargin">
+              <number>4</number>
+             </property>
+             <property name="rightMargin">
+              <number>0</number>
+             </property>
+             <property name="bottomMargin">
+              <number>4</number>
+             </property>
+             <item>
+              <spacer name="horizontalSpacer">
+               <property name="orientation">
+                <enum>Qt::Horizontal</enum>
+               </property>
+               <property name="sizeHint" stdset="0">
+                <size>
+                 <width>125</width>
+                 <height>20</height>
+                </size>
+               </property>
+              </spacer>
+             </item>
+             <item>
+              <widget class="QPushButton" name="pushButton_4">
+               <property name="minimumSize">
+                <size>
+                 <width>30</width>
+                 <height>30</height>
+                </size>
+               </property>
+               <property name="maximumSize">
+                <size>
+                 <width>30</width>
+                 <height>30</height>
+                </size>
+               </property>
+               <property name="styleSheet">
+                <string notr="true">QPushButton{
+    border-radius:0;
+    color: white;
+    background-color: #6A5ACD;
+    border: 2px solid #6A5ACD;
+}
+QPushButton:checked {
+    background-color: #6A5ACD;
+	color: white;
+}
+QPushButton:pressed {
+    background-color: #8470FF;
+	border: 2px solid #8470FF;
+}</string>
+               </property>
+               <property name="text">
+                <string/>
+               </property>
+              </widget>
+             </item>
+             <item>
+              <widget class="QPushButton" name="pushButton_5">
+               <property name="minimumSize">
+                <size>
+                 <width>30</width>
+                 <height>30</height>
+                </size>
+               </property>
+               <property name="maximumSize">
+                <size>
+                 <width>30</width>
+                 <height>30</height>
+                </size>
+               </property>
+               <property name="styleSheet">
+                <string notr="true">QPushButton{
+    border-radius:0;
+    color: white;
+    background-color: red;
+    border: 2px solid red;
+}
+QPushButton:checked {
+    background-color: red;
+	color: white;
+}
+QPushButton:pressed {
+    background-color: #ff4837;
+	border: 2px solid #ff4837;
+}</string>
+               </property>
+               <property name="text">
+                <string/>
+               </property>
+              </widget>
+             </item>
+            </layout>
+           </widget>
+          </item>
+         </layout>
+        </widget>
+       </item>
+       <item>
+        <widget class="QWidget" name="widget_7" native="true">
+         <property name="styleSheet">
+          <string notr="true">border:0</string>
+         </property>
+         <layout class="QHBoxLayout" name="horizontalLayout_3">
+          <property name="spacing">
+           <number>0</number>
+          </property>
+          <property name="leftMargin">
+           <number>0</number>
+          </property>
+          <property name="topMargin">
+           <number>0</number>
+          </property>
+          <property name="rightMargin">
+           <number>0</number>
+          </property>
+          <property name="bottomMargin">
+           <number>0</number>
+          </property>
+          <item>
+           <widget class="QWidget" name="widget" native="true">
+            <property name="styleSheet">
+             <string notr="true">border-radius:0;
+border:0;
+background:#ffffff;</string>
+            </property>
+            <layout class="QVBoxLayout" name="verticalLayout_3">
+             <property name="leftMargin">
+              <number>1</number>
+             </property>
+             <property name="topMargin">
+              <number>1</number>
+             </property>
+             <property name="rightMargin">
+              <number>1</number>
+             </property>
+             <property name="bottomMargin">
+              <number>1</number>
+             </property>
+            </layout>
+           </widget>
+          </item>
+         </layout>
+        </widget>
+       </item>
+      </layout>
+     </widget>
+    </item>
+   </layout>
+  </widget>
+ </widget>
+ <resources/>
+ <connections/>
+</ui>
