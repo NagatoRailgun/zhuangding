@@ -94,13 +94,19 @@ const int StudentService::getNowStudentNum()
     return 0;
 }
 
-QList<int> StudentService::getNowStudentId()
+QList<int> StudentService::getNowStudentId(bool(*check)(StudentClass))
 {
     QList<int>list;
-    for(int i = 0;i<classList.count();i++){
-        if(classList[i].getClassId() == nowClassId){
-            return classList[i].getStudentIds();
+    for(int i = 0;i<studentList.count();i++){
+        if(studentList[i].getClassId() != nowClassId){
+            continue;
         }
+        if(check){
+            if(!check(studentList[i])){
+                continue;
+            }
+        }
+        list.push_back(studentList[i].getStudentId());
     }
     return list;
 }
@@ -264,7 +270,7 @@ void StudentService::loadFileData()
         studentItem.setSelectLevel(obj["selectLevel"].toInt());
         studentItem.setStudentGender(obj["studentGender"].toInt());
         studentItem.setStudentName(obj["studentName"].toString());
-        studentItem.setSelectedDateime(QDateTime::fromString(obj["selectedDatetime"].toString()));
+        studentItem.setSelectedDateime(QDateTime::fromString(obj["selectedDatetime"].toString(),"yyyy-MM-dd hh:mm:ss"));
         studentList.push_back(studentItem);
     }
     qDebug()<<"["<<serviceName<<"]"<<tr("load ")<<studentList.count()<<tr(" student from json data");
@@ -291,6 +297,17 @@ void StudentService::countSelect(int studentId)
             break;
         }
     }
+}
+
+StudentClass StudentService::getStudentDataById(int studentId)
+{
+    StudentClass data;
+    for (int i = 0; i < studentList.count(); ++i) {
+        if(studentList[i].getStudentId() == studentId){
+            return studentList[i];
+        }
+    }
+    return data;
 }
 
 void StudentService::loadTestClass()

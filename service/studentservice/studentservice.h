@@ -18,7 +18,7 @@ public:
     const int getNowClassId();
     const int getNowStudentNum();
     const QString getNowClassName();
-    QList<int> getNowStudentId();
+    QList<int> getNowStudentId(bool(*check)(StudentClass) = nullptr);
     QList<QString> getNowClassStudentName();
     QString getStudentName(int studentId);
     int getStudentShowId(int studentId);
@@ -27,6 +27,7 @@ public:
     void setNewClass(ClassClass newClass,QList<StudentClass>newStudent);
     QString getAllDataToJson();
     void countSelect(int studentId);
+    StudentClass getStudentDataById(int studentId);
 private:
     static StudentService * instance;
     QList<ClassClass> classList;

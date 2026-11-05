@@ -54,6 +54,9 @@ set(PROJECT_SOURCES
         #本地存取服务
         service/fileservice/fileservice.h
         service/fileservice/fileservice.cpp
+        #历史记录服务
+        service/histroyservice/histroyservice.h
+        service/histroyservice/histroyservice.cpp
 # Class File
         #班级类
         class/classclass/classclass.h
