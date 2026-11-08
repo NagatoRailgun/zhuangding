@@ -79,7 +79,6 @@ void LoadPage::loadClassSlot()
             ui->lineEdit_2->setText("");
         });
         layout->addWidget(classItem,row,col,Qt::AlignLeft);
-        layout->setSizeConstraint(QLayout::SetFixedSize);
         classBottonList.push_back(classItem);
         if(col<colNum){
             col++;

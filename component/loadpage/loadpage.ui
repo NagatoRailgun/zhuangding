@@ -76,7 +76,11 @@
         <property name="styleSheet">
          <string notr="true">border:0;</string>
         </property>
-        <layout class="QGridLayout" name="gridLayout"/>
+        <layout class="QGridLayout" name="gridLayout">
+         <property name="sizeConstraint">
+          <enum>QLayout::SetFixedSize</enum>
+         </property>
+        </layout>
        </widget>
       </item>
       <item>
