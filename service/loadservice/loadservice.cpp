@@ -109,6 +109,7 @@ void LoadService::deleteClass(QString className)
         return;
     }
     StudentService::getInstance()->deleteClass(classId);
+    FileService::getInstance()->saveData();
 }
 
 void LoadService::saveClass(QString className)
@@ -131,5 +132,16 @@ void LoadService::saveClass(QString className)
         StudentService::getInstance()->editClass(classId,loadClass,loadStudentList);
     }
     cleanWaitingData();
+    FileService::getInstance()->saveData();
+}
+
+void LoadService::editClassName(int classId,QString className)
+{
+    qDebug()<<"["<<serviceName<<"]"<<tr("start change class name:")<<className;
+    if(classId<0){
+        qDebug()<<"["<<serviceName<<"]"<<tr("no class has been find");
+        return;
+    }
+    StudentService::getInstance()->editClassName(classId,className);
     FileService::getInstance()->saveData();
 }

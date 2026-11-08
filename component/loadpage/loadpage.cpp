@@ -98,7 +98,17 @@ void LoadPage::on_pushButton_2_clicked()
 
 void LoadPage::on_pushButton_4_clicked()
 {
-    serviceLoad->saveClass(ui->lineEdit->text());
+    int selectClassId = -1;
+    for(int i = 0;i<classBottonList.count();i++){
+        if(classBottonList[i]->checkSelected()){
+            selectClassId = classBottonList[i]->getClassId();
+        }
+    }
+    if(selectClassId<0){
+        serviceLoad->saveClass(ui->lineEdit->text());
+    }else{
+        serviceLoad->editClassName(selectClassId,ui->lineEdit->text());
+    }
 }
 
 

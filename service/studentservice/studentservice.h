@@ -30,6 +30,7 @@ public:
     void addClass(ClassClass newClass,QList<StudentClass>newStudent);
     void editClass(int classId,ClassClass newClass,QList<StudentClass>newStudent);
     void deleteClass(int classId);
+    void editClassName(int classId,QString className);
     QString getAllDataToJson();
     bool checkClassEmpty();
     void countSelect(int studentId);

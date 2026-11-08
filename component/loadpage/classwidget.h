@@ -18,9 +18,12 @@ public:
     void setUnselected();
     void setSelected();
     bool checkId(int classId);
+    bool checkSelected();
+    int getClassId();
 private:
     Ui::ClassWidget *ui;
     ClassClass classData;
+    bool selectFlag;
 private:
     void leftMousePress(QMouseEvent * e) override;
     void rightMousePress(QMouseEvent * e) override;

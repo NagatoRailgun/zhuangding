@@ -41,8 +41,18 @@ bool ClassWidget::checkId(int classId)
     return true;
 }
 
+bool ClassWidget::checkSelected()
+{
+    return selectFlag;
+}
+
+int ClassWidget::getClassId(){
+    return classData.getClassId();
+}
+
 void ClassWidget::setSelected()
 {
+    selectFlag = true;
     ui->widget->setStyleSheet(
         "QWidget{"
           "border-radius: 8px;"
@@ -58,6 +68,7 @@ void ClassWidget::setSelected()
 
 void ClassWidget::setUnselected()
 {
+    selectFlag = false;
     if(classData.getSelected()){
         ui->widget->setStyleSheet(
             "QWidget{"

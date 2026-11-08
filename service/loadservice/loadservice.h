@@ -17,6 +17,7 @@ public:
     void cleanWaitingData();
     void deleteClass(QString className);
     void saveClass(QString className);
+    void editClassName(int classId,QString className);
 private:
     static LoadService * instance;
     ClassClass loadClass;

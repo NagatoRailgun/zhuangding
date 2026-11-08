@@ -285,6 +285,18 @@ void StudentService::deleteClass(int classId)
     emit signalClassChange();
 }
 
+void StudentService::editClassName(int classId,QString className)
+{
+    for(int i = 0;i<classList.count();i++){
+        if(classList[i].getClassId() == classId){
+            classList[i].setClassName(className);
+            setNowClassId(classList[i].getClassId());
+            emit signalClassChange();
+            return;
+        }
+    }
+}
+
 bool StudentService::checkClassEmpty()
 {
     if(classList.count()){
