@@ -39,6 +39,12 @@ void LoadService::beforeCloseService(){
     qDebug()<<"["<<serviceName<<"]"<<tr("service closing");
 }
 
+void LoadService::cleanWaitingData()
+{
+    loadClass.clear();
+    loadStudentList.clear();
+}
+
 void LoadService::loadExcel(QString className,QString path)
 {
     int row,col;
@@ -47,9 +53,9 @@ void LoadService::loadExcel(QString className,QString path)
     std::shared_ptr<QXlsx::Cell>cell ;
     std::shared_ptr<QXlsx::Cell>cellTitile ;
 
-    loadClass.setClassId(StudentService::getInstance()->getFreeClassId());
+    cleanWaitingData();
     loadClass.setClassName(className);
-    loadStudentList.clear();
+
     qDebug()<<"["<<serviceName<<"]"<<tr("load excel:")<<path;
     row = xlsx.dimension().lastRow();
     col  = xlsx.dimension().lastColumn();
@@ -67,8 +73,6 @@ void LoadService::loadExcel(QString className,QString path)
             if(!cell){
                 continue;
             }
-            student.setStudentId(StudentService::getInstance()->getFreeStudentId()+num);
-            student.setClassId(loadClass.getClassId());
             qDebug()<<"["<<serviceName<<"]("<<j<<","<<i<<"):"<<cell->value();
             if(cellTitile->value().toString() == "学号" || cellTitile->value().toString() == "编号" || cellTitile->value().toString() == "ID"){
                 student.setStudentShowId(cell->value().toInt());
@@ -84,21 +88,48 @@ void LoadService::loadExcel(QString className,QString path)
                 student.setSelectLevel(cell->value().toInt());
             }
         }
-        loadStudentList.append(student);
+        if(!student.getStudentName().isEmpty()){
+            loadStudentList.append(student);
+        }
         num++;
     }
-    qDebug()<<"["<<serviceName<<"]"<<loadStudentList.size()<<" students has been loaded";
+    if(num){
+        //待保存class数据的id一旦置为0就意味着生效
+        loadClass.setClassId(0);
+    }
+    qDebug()<<"["<<serviceName<<"]"<<loadStudentList.size()<<" "<<tr("students has been loaded");
 }
 
-void LoadService::saveNewClass()
+void LoadService::deleteClass(QString className)
 {
-    if(loadClass.getClassId()<0){
-        qDebug()<<"["<<serviceName<<"] no class has been loaded";
+    qDebug()<<"["<<serviceName<<"]"<<tr("start delete class:")<<className;
+    int classId = StudentService::getInstance()->getClassIdByName(className);
+    if(classId<0){
+        qDebug()<<"["<<serviceName<<"]"<<tr("no class has been find");
         return;
     }
-    StudentService::getInstance()->setNewClass(loadClass,loadStudentList);
-    loadClass.setClassId(-1);
-    loadClass.setClassName("");
-    loadStudentList.clear();
+    StudentService::getInstance()->deleteClass(classId);
+}
+
+void LoadService::saveClass(QString className)
+{
+    qDebug()<<"["<<serviceName<<"]"<<tr("start save class:")<<className;
+    int classId = StudentService::getInstance()->getClassIdByName(className);
+    if(classId<0){
+        qDebug()<<"["<<serviceName<<"]"<<tr("start add class:")<<className;
+    }else{
+        qDebug()<<"["<<serviceName<<"]"<<tr("start edit class:")<<className;
+    }
+    if(loadClass.getClassId()<0){
+        qDebug()<<"["<<serviceName<<"]"<<tr(" no class data has been loaded");
+        return;
+    }
+    loadClass.setClassName(className);
+    if(classId<0){
+        StudentService::getInstance()->addClass(loadClass,loadStudentList);
+    }else{
+        StudentService::getInstance()->editClass(classId,loadClass,loadStudentList);
+    }
+    cleanWaitingData();
     FileService::getInstance()->saveData();
 }

@@ -18,14 +18,20 @@ public:
     const int getNowClassId();
     const int getNowStudentNum();
     const QString getNowClassName();
+    int getClassIdByName(QString className);
+    QList<int> getAllClassId();
+    ClassClass getClassData(int classId);
     QList<int> getNowStudentId(bool(*check)(StudentClass) = nullptr);
     QList<QString> getNowClassStudentName();
     QString getStudentName(int studentId);
     int getStudentShowId(int studentId);
     int getFreeClassId();
     int getFreeStudentId();
-    void setNewClass(ClassClass newClass,QList<StudentClass>newStudent);
+    void addClass(ClassClass newClass,QList<StudentClass>newStudent);
+    void editClass(int classId,ClassClass newClass,QList<StudentClass>newStudent);
+    void deleteClass(int classId);
     QString getAllDataToJson();
+    bool checkClassEmpty();
     void countSelect(int studentId);
     StudentClass getStudentDataById(int studentId);
 private:
@@ -40,6 +46,7 @@ private:
     void loadTestStudent();
 signals:
     void signalNowClassChange(int nowClassId);
+    void signalClassChange();
 };
 
 #endif // STUDENTSERVICE_H

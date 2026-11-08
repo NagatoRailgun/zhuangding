@@ -47,6 +47,7 @@ void StudentService::beforeCloseService(){
 
 int StudentService::setNowClassId(int id)
 {
+    int exitFlag = 0;
     for(int i = 0;i<classList.count();i++){
         classList[i].setSelected(false);
     }
@@ -56,8 +57,13 @@ int StudentService::setNowClassId(int id)
             classList[i].setSelected(true);
             qDebug()<<"["<<serviceName<<"]"<<tr("set now class id:")<<nowClassId<<","<<tr("name:")<<classList[i].getClassName();
             emit signalNowClassChange(nowClassId);
-            return 0;
+            exitFlag = 1;
+        }else{
+            classList[i].setSelected(false);
         }
+    }
+    if(exitFlag){
+        return 0;
     }
     if(classList.count()){
         nowClassId = classList[0].getClassId();
@@ -66,12 +72,35 @@ int StudentService::setNowClassId(int id)
         emit signalNowClassChange(nowClassId);
         return 0;
     }
+    nowClassId = -1;
+    emit signalNowClassChange(nowClassId);
     return 1;
 }
 
 const int StudentService::getNowClassId()
 {
     return nowClassId;
+}
+
+QList<int> StudentService::getAllClassId()
+{
+    QList<int> ids;
+    for(int i = 0;i<classList.count();i++){
+        ids.push_back(classList[i].getClassId());
+    }
+    return ids;
+}
+
+ClassClass StudentService::getClassData(int classId)
+{
+    ClassClass data;
+    for(int i = 0;i<classList.count();i++){
+        if(classList[i].getClassId() == classId){
+            data = classList[i];
+            return data;
+        }
+    }
+    return data;
 }
 
 const QString StudentService::getNowClassName()
@@ -82,6 +111,17 @@ const QString StudentService::getNowClassName()
         }
     }
     return tr("Unselected");
+}
+
+int StudentService::getClassIdByName(QString className)
+{
+    int id = -1;
+    for(int i = 0;i<classList.count();i++){
+        if(classList[i].getClassName() == className){
+            return classList[i].getClassId();
+        }
+    }
+    return id;
 }
 
 const int StudentService::getNowStudentNum()
@@ -134,16 +174,16 @@ int StudentService::getFreeClassId()
 int StudentService::getFreeStudentId()
 {
     int nId = 0;
-    int nflag = 0;
-    while(nId<2000){
-        nflag = 0;
+    int exitFlag = 0;
+    while(nId<5000){
+        exitFlag = 0;
         for(int i = 0;i<studentList.count();i++){
             if(studentList[i].getStudentId() == nId){
-                nflag = 1;
+                exitFlag = 1;
                 break;
             }
         }
-        if(!nflag){
+        if(!exitFlag){
             return nId;
         }
         nId++;
@@ -182,15 +222,75 @@ int StudentService::getStudentShowId(int studentId)
     return -1;
 }
 
-void StudentService::setNewClass(ClassClass newClass,QList<StudentClass>newStudent)
+void StudentService::addClass(ClassClass newClass,QList<StudentClass>newStudent)
 {
+    int classId = getFreeClassId();
+    int studentId = getFreeStudentId();
     int pos = classList.count();
+    qDebug()<<"["<<serviceName<<"]"<<tr("add class:")<<newClass.getClassName()<<","<<tr("id:")<<classId;
+    newClass.setClassId(classId);
+    newClass.setClassName(newClass.getClassName());
     classList.push_back(newClass);
     for(int i = 0;i<newStudent.count();i++){
+        newStudent[i].setStudentId(studentId + i);
+        newStudent[i].setClassId(classId);
         studentList.push_back(newStudent[i]);
     }
     classList[pos].setStudentListPoint(&studentList);
     setNowClassId(newClass.getClassId());
+    emit signalClassChange();
+}
+
+void StudentService::editClass(int classId,ClassClass newClass,QList<StudentClass>newStudent)
+{
+    qDebug()<<"["<<serviceName<<"]"<<tr("edit class id:")<<classId;
+    deleteClass(classId);
+    addClass(newClass,newStudent);
+    setNowClassId(nowClassId);
+    emit signalClassChange();
+}
+
+void StudentService::deleteClass(int classId)
+{
+    bool existFlag;
+    ClassClass data;
+    int count;
+    qDebug()<<"["<<serviceName<<"]"<<tr("delete class id:")<<classId;
+    existFlag = false;
+    for(int i = 0;i<classList.count();i++){
+        if(classList[i].getClassId() == classId){
+            data = classList[i];
+            classList.remove(i);
+            existFlag = true;
+            i--;
+            break;
+        }
+    }
+    if(!existFlag){
+        qDebug()<<"["<<serviceName<<"]"<<tr("fail to find class by id:")<<classId;
+        return;
+    }
+    count = 0;
+    for(int i = 0;i<studentList.count();i++){
+        if(studentList[i].getClassId() == classId){
+            studentList.remove(i);
+            i--;
+            count++;
+        }
+    }
+    qDebug()<<"["<<serviceName<<"]"<<tr("delete class:")<<data.getClassName()<<","<<tr("with ")<<count<<tr(" students");
+    if(nowClassId == classId){
+        setNowClassId(0);
+    }
+    emit signalClassChange();
+}
+
+bool StudentService::checkClassEmpty()
+{
+    if(classList.count()){
+        return false;
+    }
+    return true;
 }
 
 QString StudentService::getAllDataToJson()

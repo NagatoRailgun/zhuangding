@@ -12,6 +12,7 @@ public:
     void setClassName( QString name );
     void setStudentListPoint(QList<StudentClass> * point);
     void setSelected(bool isSelected);
+    void clear();
     const int getClassId();
     const QString getClassName();
     QList<QString> getStudentNames();

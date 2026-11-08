@@ -1,6 +1,7 @@
 #ifndef LOADPAGE_H
 #define LOADPAGE_H
 
+#include "classwidget.h"
 #include "basicpage/basicpage.h"
 #include "studentservice/studentservice.h"
 #include "loadservice/loadservice.h"
@@ -19,10 +20,13 @@ private:
     Ui::LoadPage *ui;
     StudentService * serviceStudent = nullptr;
     LoadService * serviceLoad = nullptr;
+    QList<ClassWidget *>classBottonList;
+    int nowSelectedClassId;
 private:
     void initService() override;
     void connectSignal() override;
 private slots:
+    void loadClassSlot();
     void on_pushButton_3_clicked();
     void on_pushButton_2_clicked();
     void on_pushButton_4_clicked();

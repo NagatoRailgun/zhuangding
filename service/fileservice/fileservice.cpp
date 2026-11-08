@@ -54,6 +54,15 @@ void FileService::saveData()
     }
     qDebug()<<"["<<serviceName<<"]"<<tr("create folder:")<<folderPath;
     QFile file(folderPath+"/appdata.json");
+    if(StudentService::getInstance()->checkClassEmpty()){
+        //空数据时删除缓存文件
+        if(file.exists()){
+            file.remove();
+            qDebug()<<"["<<serviceName<<"]"<<tr("remove file:")<<file.filesystemFileName();
+        }
+        return;
+    }
+
     if(!file.open(QIODevice::WriteOnly)){
         qDebug()<<"["<<serviceName<<"]"<<tr("fail to open file:")<<file.filesystemFileName();
         return;

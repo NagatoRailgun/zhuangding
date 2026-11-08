@@ -5,13 +5,13 @@
 #include "catchservice/catchservice.h"
 #include "loadservice/loadservice.h"
 #include "fileservice/fileservice.h"
-#include "histroyservice/histroyservice.h""
+#include "histroyservice/histroyservice.h"
 
 #include "catchpage/catchpage.h"
 #include "loadpage/loadpage.h"
 #include "optionpage/optionpage.h"
 #include "histroypage/histroypage.h"
-
+#include "numberpage/numberpage.h"
 
 MainWindow::MainWindow(QWidget *parent)
     : QMainWindow(parent)
@@ -20,8 +20,8 @@ MainWindow::MainWindow(QWidget *parent)
     setWindowFlags(Qt::FramelessWindowHint);
     setAttribute(Qt::WA_TranslucentBackground);
     initService();
-    connectSignal();
     ui->setupUi(this);
+    connectSignal();
     ui->pushButton->click();
     loadClassDataSlot();
 }
@@ -94,9 +94,24 @@ void MainWindow::initHistroyPage()
     leftPage->show();
 }
 
+void MainWindow::initNumberPage()
+{
+    if(leftPage){
+        ui->widget->layout()->removeWidget(leftPage);
+    }
+    delete leftPage;
+    leftPage = new NumberPage(ui->widget);
+    ui->widget->layout()->addWidget(leftPage);
+    leftPage->show();
+}
+
 void MainWindow::connectSignal()
 {
     connect(StudentService::getInstance(),SIGNAL(signalNowClassChange(int)),this,SLOT(loadClassDataSlot()));
+    connect(ui->widget_3,SIGNAL(signalLeftPress(QMouseEvent *)),this,SLOT(startMovePageSlot(QMouseEvent *)));
+    connect(ui->widget_4,SIGNAL(signalLeftPress(QMouseEvent *)),this,SLOT(startMovePageSlot(QMouseEvent *)));
+    connect(ui->widget_3,SIGNAL(signalMouseRelease(QMouseEvent *)),this,SLOT(stopMovePageSlot(QMouseEvent *)));
+    connect(ui->widget_4,SIGNAL(signalMouseRelease(QMouseEvent *)),this,SLOT(stopMovePageSlot(QMouseEvent *)));
 }
 
 void MainWindow::loadClassDataSlot()
@@ -128,6 +143,10 @@ void MainWindow::on_pushButton_6_clicked()
     initHistroyPage();
 }
 
+void MainWindow::on_pushButton_7_clicked()
+{
+    initNumberPage();
+}
 
 void MainWindow::on_pushButton_4_clicked()
 {
@@ -140,3 +159,22 @@ void MainWindow::on_pushButton_5_clicked()
     QApplication::quit();
 }
 
+void MainWindow::startMovePageSlot(QMouseEvent * e)
+{
+    movingFlag = true;
+    mouseOffset = e->globalPosition() - this->pos();
+}
+
+void MainWindow::stopMovePageSlot(QMouseEvent * e)
+{
+    movingFlag = false;
+}
+
+void MainWindow::mouseMoveEvent(QMouseEvent * e)
+{
+    if(!movingFlag){
+        return;
+    }
+    QPointF newPoint = e->globalPosition() - mouseOffset;
+    this->move(newPoint.toPoint());
+}

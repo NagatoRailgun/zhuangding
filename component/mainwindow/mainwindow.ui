@@ -31,7 +31,7 @@
      <number>0</number>
     </property>
     <item>
-     <widget class="QWidget" name="widget_3" native="true">
+     <widget class="BasicButtonWidget" name="widget_3" native="true">
       <property name="minimumSize">
        <size>
         <width>60</width>
@@ -60,16 +60,16 @@ background:#C4D2F7;</string>
         <widget class="QWidget" name="widget_10" native="true">
          <layout class="QVBoxLayout" name="verticalLayout">
           <property name="leftMargin">
-           <number>0</number>
+           <number>1</number>
           </property>
           <property name="topMargin">
-           <number>0</number>
+           <number>1</number>
           </property>
           <property name="rightMargin">
-           <number>0</number>
+           <number>1</number>
           </property>
           <property name="bottomMargin">
-           <number>0</number>
+           <number>1</number>
           </property>
           <item>
            <widget class="QPushButton" name="pushButton">
@@ -112,6 +112,56 @@ QPushButton:pressed {
             </property>
             <property name="text">
              <string>C</string>
+            </property>
+            <property name="checkable">
+             <bool>true</bool>
+            </property>
+            <property name="autoExclusive">
+             <bool>true</bool>
+            </property>
+           </widget>
+          </item>
+          <item>
+           <widget class="QPushButton" name="pushButton_7">
+            <property name="minimumSize">
+             <size>
+              <width>40</width>
+              <height>40</height>
+             </size>
+            </property>
+            <property name="maximumSize">
+             <size>
+              <width>40</width>
+              <height>40</height>
+             </size>
+            </property>
+            <property name="styleSheet">
+             <string notr="true">QPushButton{
+    border-radius: 8px;
+    padding: 4px 4px;
+    text-align: center;
+    text-decoration: none;
+    margin: 4px 2px;
+	background:white;
+    color: black;
+    border: 2px solid white;
+}
+QPushButton:hover {
+    border: 2px solid #cbcbcb;
+    background-color: #cbcbcb;
+}
+QPushButton:checked {
+ 	border: 2px solid #8470FF;
+    background-color:  #8470FF;
+	color: white;
+}
+QPushButton:pressed {
+    background-color: #6A5ACD;
+	border: 2px solid #6A5ACD;
+}</string>
+            </property>
+            <property name="text">
+             <string>N</string>
             </property>
             <property name="checkable">
              <bool>true</bool>
@@ -317,7 +367,7 @@ background:#F2F6FF;</string>
         <number>1</number>
        </property>
        <item>
-        <widget class="QWidget" name="widget_4" native="true">
+        <widget class="BasicButtonWidget" name="widget_4" native="true">
          <property name="minimumSize">
           <size>
            <width>0</width>
@@ -565,6 +615,14 @@ background:#ffffff;</string>
    </layout>
   </widget>
  </widget>
+ <customwidgets>
+  <customwidget>
+   <class>BasicButtonWidget</class>
+   <extends>QWidget</extends>
+   <header>basicbuttonwidget/basicbuttonwidget.h</header>
+   <container>1</container>
+  </customwidget>
+ </customwidgets>
  <resources/>
  <connections/>
 </ui>

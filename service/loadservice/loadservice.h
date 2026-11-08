@@ -14,7 +14,9 @@ public:
     void afterInitService() override;
     void beforeCloseService() override;
     void loadExcel(QString className,QString path);
-    void saveNewClass();
+    void cleanWaitingData();
+    void deleteClass(QString className);
+    void saveClass(QString className);
 private:
     static LoadService * instance;
     ClassClass loadClass;

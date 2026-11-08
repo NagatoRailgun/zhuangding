@@ -2,7 +2,16 @@
 
 ClassClass::ClassClass()
 {
+    clear();
+}
 
+void ClassClass::clear()
+{
+    setClassId(-1);
+    setClassName("");
+    setSelected(false);
+    studentIdList.clear();
+    studentListPoint = nullptr;
 }
 
 void ClassClass::setClassId( int id)

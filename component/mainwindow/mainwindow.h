@@ -2,6 +2,7 @@
 #define MAINWINDOW_H
 
 #include <QMainWindow>
+#include <QPointF>
 #include "basicpage/basicpage.h"
 #include "basicservice/basicservice.h"
 
@@ -15,13 +16,6 @@ class MainWindow : public QMainWindow
 public:
     MainWindow(QWidget *parent = nullptr);
     ~MainWindow();
-private slots:
-    void on_pushButton_clicked();
-    void on_pushButton_2_clicked();
-    void on_pushButton_3_clicked();
-    void on_pushButton_6_clicked();
-    void on_pushButton_4_clicked();
-    void on_pushButton_5_clicked();
 private:
     void initService();
     void connectSignal();
@@ -29,11 +23,24 @@ private:
     void initLoadPage();
     void initOptionPage();
     void initHistroyPage();
+    void initNumberPage();
+    void mouseMoveEvent(QMouseEvent * e) override;
 private:
     Ui::MainWindow *ui;
     QList<BasicService *>serviceList;
     BasicPage * leftPage = nullptr;
+    bool movingFlag;
+    QPointF mouseOffset;
 private slots:
         void loadClassDataSlot();
+        void on_pushButton_clicked();
+        void on_pushButton_2_clicked();
+        void on_pushButton_3_clicked();
+        void on_pushButton_6_clicked();
+        void on_pushButton_4_clicked();
+        void on_pushButton_5_clicked();
+        void on_pushButton_7_clicked();
+        void startMovePageSlot(QMouseEvent * e);
+        void stopMovePageSlot(QMouseEvent * e);
 };
 #endif // MAINWINDOW_H

@@ -22,6 +22,9 @@ set(PROJECT_SOURCES
         #页基类
         component/basicpage/basicpage.h
         component/basicpage/basicpage.cpp
+        #图形按钮基类
+        component/basicbuttonwidget/basicbuttonwidget.h
+        component/basicbuttonwidget/basicbuttonwidget.cpp
         #抽奖页
         component/catchpage/catchpage.h
         component/catchpage/catchpage.cpp
@@ -30,6 +33,10 @@ set(PROJECT_SOURCES
         component/loadpage/loadpage.h
         component/loadpage/loadpage.cpp
         component/loadpage/loadpage.ui
+        #班级按钮控件
+        component/loadpage/classwidget.h
+        component/loadpage/classwidget.cpp
+        component/loadpage/classwidget.ui
         #设置页
         component/optionpage/optionpage.h
         component/optionpage/optionpage.cpp
@@ -38,6 +45,10 @@ set(PROJECT_SOURCES
         component/histroypage/histroypage.h
         component/histroypage/histroypage.cpp
         component/histroypage/histroypage.ui
+        #随机数页
+        component/numberpage/numberpage.h
+        component/numberpage/numberpage.cpp
+        component/numberpage/numberpage.ui
 # Service File
         #服务基类
         service/basicservice/basicservice.h
