@@ -16,6 +16,7 @@ public:
     static CatchService *  getInstance(QObject * parent  = nullptr);
     void afterInitService() override;
     void beforeCloseService() override;
+    void cleanWaitingData();
     void catch1Time();//单次可重复抽取
     void catch1TimeRepeatless();//单次不可重复抽取
     void catch10Times();//十连抽取

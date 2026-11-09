@@ -27,12 +27,24 @@ CatchService * CatchService::getInstance(QObject * parent){
 CatchService * CatchService::instance = nullptr;
 
 
-void CatchService::afterInitService(){
-
+void CatchService::afterInitService()
+{
+    cleanWaitingData();
 }
 
 void CatchService::beforeCloseService(){
     qDebug()<<"["<<serviceName<<"]"<<tr("service closing");
+}
+
+void CatchService::cleanWaitingData()
+{
+    qDebug()<<"["<<serviceName<<"]"<<tr("clean waiting data");
+    moreCatchflag = 0;
+    selectedStudentIdList.clear();
+    nowSelectedStudentIdList.clear();
+
+    studentIdPool.clear();
+    studentIdPool2.clear();
 }
 
 void CatchService::catch1Time()

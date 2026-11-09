@@ -5,6 +5,7 @@
 #include "basicpage/basicpage.h"
 #include "studentservice/studentservice.h"
 #include "catchservice/catchservice.h"
+#include "optionservice/optionservice.h"
 
 namespace Ui {
 class CatchPage;
@@ -20,6 +21,7 @@ private:
     Ui::CatchPage *ui;
     StudentService * serviceStudent = nullptr;
     CatchService * serviceCatch = nullptr;
+    OptionService * serviceOption = nullptr;
     QTimer timer;
     int showNum;
     int selectedStudentId = -1;
@@ -33,6 +35,7 @@ private:
     void signalCatchStudentSlot(int pos,int studentId);
     void signalCatchStudentAddSlot(int studentId);
     void showNameSlot();
+    void showOptionSlot();
     void on_pushButton_clicked();
     void on_pushButton_2_clicked();
     void on_pushButton_3_pressed();

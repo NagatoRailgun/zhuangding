@@ -68,6 +68,9 @@ set(PROJECT_SOURCES
         #历史记录服务
         service/histroyservice/histroyservice.h
         service/histroyservice/histroyservice.cpp
+        #选项设置服务
+        service/optionservice/optionservice.h
+        service/optionservice/optionservice.cpp
 # Class File
         #班级类
         class/classclass/classclass.h
@@ -75,6 +78,9 @@ set(PROJECT_SOURCES
         #学生类
         class/studentclass/studentclass.h
         class/studentclass/studentclass.cpp
+        #选项设置类
+        class/optionclass/optionclass.h
+        class/optionclass/optionclass.cpp
 )
 
 include_directories(service)

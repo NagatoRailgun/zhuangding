@@ -3,6 +3,7 @@
 #include <QJsonDocument>
 #include "studentservice.h"
 #include "fileservice/fileservice.h"
+#include "catchservice/catchservice.h"
 
 StudentService::StudentService(QObject *parent)
     : BasicService{parent}
@@ -30,7 +31,7 @@ StudentService * StudentService::instance = nullptr;
 
 
 void StudentService::afterInitService(){
-    if(FileService::getInstance()->checkSaveFile()){
+    if(FileService::getInstance()->checkDataFile()){
         qDebug()<<"["<<serviceName<<"]"<<tr("save data existed");
         loadFileData();
         return;
@@ -41,7 +42,8 @@ void StudentService::afterInitService(){
     setNowClassId(0);
 }
 
-void StudentService::beforeCloseService(){
+void StudentService::beforeCloseService()
+{
     qDebug()<<"["<<serviceName<<"]"<<tr("service closing");
 }
 
@@ -57,6 +59,7 @@ int StudentService::setNowClassId(int id)
             classList[i].setSelected(true);
             qDebug()<<"["<<serviceName<<"]"<<tr("set now class id:")<<nowClassId<<","<<tr("name:")<<classList[i].getClassName();
             emit signalNowClassChange(nowClassId);
+            CatchService::getInstance()->cleanWaitingData();
             exitFlag = 1;
         }else{
             classList[i].setSelected(false);

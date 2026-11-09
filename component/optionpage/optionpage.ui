@@ -425,7 +425,7 @@ QPushButton:pressed {
                </size>
               </property>
               <property name="text">
-               <string>Repeat:</string>
+               <string>‌Inherit Repeat:</string>
               </property>
               <property name="alignment">
                <set>Qt::AlignRight|Qt::AlignTrailing|Qt::AlignVCenter</set>

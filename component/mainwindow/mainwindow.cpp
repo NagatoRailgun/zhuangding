@@ -6,6 +6,7 @@
 #include "loadservice/loadservice.h"
 #include "fileservice/fileservice.h"
 #include "histroyservice/histroyservice.h"
+#include "optionservice/optionservice.h"
 
 #include "catchpage/catchpage.h"
 #include "loadpage/loadpage.h"
@@ -45,6 +46,7 @@ void MainWindow::initService()
     serviceList.append(LoadService::getInstance());
     serviceList.append(FileService::getInstance());
     serviceList.append(HistroyService::getInstance());
+    serviceList.append(OptionService::getInstance());
     for(int i = 0;i<serviceList.length();i++){
         serviceList[i]->afterInitService();
     }

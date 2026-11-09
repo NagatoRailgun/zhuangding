@@ -1,6 +1,7 @@
 #include<QRandomGenerator>
 #include "catchpage.h"
 #include "ui_catchpage.h"
+#include "optionclass/optionclass.h"
 
 CatchPage::CatchPage(QWidget *parent):
     BasicPage(parent),
@@ -11,6 +12,7 @@ CatchPage::CatchPage(QWidget *parent):
     connectSignal();
     signalNowClassChangeSlot(serviceStudent->getNowClassId());
     signalCatchStudentAddSlot(-1);
+    showOptionSlot();
 }
 
 CatchPage::~CatchPage()
@@ -21,12 +23,14 @@ CatchPage::~CatchPage()
 void CatchPage::initService(){
     serviceCatch = CatchService::getInstance();
     serviceStudent = StudentService::getInstance();
+    serviceOption = OptionService::getInstance();
 }
 
 void CatchPage::connectSignal(){
     connect(serviceStudent,SIGNAL(signalNowClassChange(int)),this,SLOT(signalNowClassChangeSlot(int)));
     connect(serviceCatch,SIGNAL(signalCatchStudent(int,int)),this,SLOT(signalCatchStudentSlot(int,int)));
     connect(serviceCatch,SIGNAL(signalCatchStudentAdd(int)),this,SLOT(signalCatchStudentAddSlot(int)));
+    connect(serviceOption,SIGNAL(signalOptionChange()),this,SLOT(showOptionSlot()));
     connect(&timer,SIGNAL(timeout()),this,SLOT(showNameSlot()));
 }
 
@@ -81,6 +85,30 @@ void CatchPage::showNameSlot()
     rnum = QRandomGenerator::global()->bounded(0,nStudentNum);
     ui->label_5->setText(tr("No.")+QString::number(serviceStudent->getStudentShowId(studentIdPool[rnum]))+tr(" "));
     ui->label_2->setText(serviceStudent->getStudentName(studentIdPool[rnum]));
+}
+
+void CatchPage::showOptionSlot()
+{
+    OptionClass options = serviceOption->getOption();
+    if(options.getPriority() == OptionClass::PRIORITY_TYPE_RANDOM){
+        ui->label_6->setText(tr("Priority:Random"));
+    }else if(options.getPriority() == OptionClass::PRIORITY_TYPE_UNSELECTED){
+        ui->label_6->setText(tr("Priority:Unselected"));
+    }else if(options.getPriority() == OptionClass::PRIORITY_TYPE_LEVEL){
+        ui->label_6->setText(tr("Priority:Level"));
+    }
+    if(options.getInheritRepeat() == OptionClass::INHERITREPEAT_TYPETYPE_ABLE){
+        ui->label_7->setText(tr("Selected Count: Inherit"));
+    }else if(options.getInheritRepeat() == OptionClass::INHERITREPEAT_TYPE_TYPE_DISABLE){
+        ui->label_7->setText(tr("Selected Count: Abandon"));
+    }
+    if(options.getGender() == OptionClass::GENDER_TYPE_ALL){
+        ui->label_8->setText(tr("Gender:All"));
+    }else if(options.getGender() == OptionClass::GENDER_TYPE_MALE){
+        ui->label_8->setText(tr("Gender:Male"));
+    }else if(options.getGender() == OptionClass::GENDER_TYPEFEMALE){
+        ui->label_8->setText(tr("Gender:Female"));
+    }
 }
 
 void CatchPage::loadStudentName()
