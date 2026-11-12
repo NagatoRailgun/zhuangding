@@ -120,7 +120,7 @@ void CatchPage::showOptionSlot()
         ui->label_8->setText(tr("Gender:All"));
     }else if(options.getGender() == OptionClass::GENDER_TYPE_MALE){
         ui->label_8->setText(tr("Gender:Male"));
-    }else if(options.getGender() == OptionClass::GENDER_TYPEFEMALE){
+    }else if(options.getGender() == OptionClass::GENDER_TYPE_FEMALE){
         ui->label_8->setText(tr("Gender:Female"));
     }
 }

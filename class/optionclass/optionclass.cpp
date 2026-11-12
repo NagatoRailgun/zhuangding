@@ -59,8 +59,8 @@ void OptionClass::setGender(int type)
 {
     if(type == GENDER_TYPE_MALE){
         gender = GENDER_TYPE_MALE;
-    }else if(type == GENDER_TYPEFEMALE){
-        gender = GENDER_TYPEFEMALE;
+    }else if(type == GENDER_TYPE_FEMALE){
+        gender = GENDER_TYPE_FEMALE;
     }else{
         gender = GENDER_TYPE_ALL;
     }

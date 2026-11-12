@@ -376,6 +376,117 @@ QPushButton:pressed {
              <height>16777215</height>
             </size>
            </property>
+           <property name="styleSheet">
+            <string notr="true">QTableView {
+    border: 1px solid #C4D2F7;
+    border-radius: 6px;
+    background-color: #ffffff;
+    color: black;
+    gridline-color: #ccc; /* 网格线颜色 */
+    outline: none;
+    selection-background-color: transparent; /* 必须关掉，交给 ::item 控制选中 */
+}
+
+/* 单元格 */
+QTableView::item {
+    padding: 4px 6px;
+    border: none;
+}
+QTableView::item:hover:!selected {
+    background-color: rgb(255,184,77); /* 浅橙悬浮 */
+    color: #000000;
+}
+QTableView::item:selected:active {
+    background-color: rgb(255,125,0); /* 主橙选中 */
+    color: white;
+}
+QTableView::item:selected:!active {
+    background-color: rgb(200, 100, 0);
+    color: #dddddd;
+}
+/* 隔行变色，代码开启 ui-&gt;tableView-&gt;setAlternatingRowColors(true); */
+QTableView::item:alternate {
+    background-color: #F2F6FF;
+}
+
+/* ========== 水平表头（顶部列标题） ========== */
+QTableView::section:horizontal {
+    background-color: #C4D2F7;
+    color: #ffffff;
+    padding: 6px 8px;
+    border: none;
+    border-right: 1px solid #C4D2F7;
+    border-bottom: 1px solid #C4D2F7;
+}
+QTableView::section:horizontal:hover {
+    background-color: #484848;
+}
+
+/* ========== 垂直表头（左侧行号，如果你没隐藏时生效） ========== */
+QTableView::section:vertical {
+    background-color: #3c3c3c;
+    color: #cccccc;
+    padding: 4px;
+    border: none;
+    border-right: 1px solid #444444;
+    border-bottom: 1px solid #444444;
+}
+
+/* ========== 滚动条（只属于这个TableView，不全局生效） ========== */
+QTableView QScrollBar:vertical {
+    width: 8px;
+    background: transparent;
+    margin: 2px;
+}
+QTableView QScrollBar::handle:vertical {
+    background: #555555;
+    border-radius: 4px;
+    min-height: 20px;
+}
+QTableView QScrollBar::handle:vertical:hover {
+    background: #707070;
+}
+QTableView QScrollBar::sub-line:vertical,
+QTableView QScrollBar::add-line:vertical {
+    height:0;
+}
+QTableView QScrollBar::up-arrow:vertical,
+QTableView QScrollBar::down-arrow:vertical {
+    width:0;
+    height:0;
+}
+QTableView QScrollBar::sub-page:vertical,
+QTableView QScrollBar::add-page:vertical {
+    background: transparent;
+}
+
+QTableView QScrollBar:horizontal {
+    height: 8px;
+    background: transparent;
+    margin: 2px;
+}
+QTableView QScrollBar::handle:horizontal {
+    background: #555555;
+    border-radius: 4px;
+    min-width: 20px;
+}
+QTableView QScrollBar::handle:horizontal:hover {
+    background: #707070;
+}
+QTableView QScrollBar::sub-line:horizontal,
+QTableView QScrollBar::add-line:horizontal {
+    width:0;
+}
+QTableView QScrollBar::left-arrow:horizontal,
+QTableView QScrollBar::right-arrow:horizontal {
+    width:0;
+    height:0;
+}
+QTableView QScrollBar::sub-page:horizontal,
+QTableView QScrollBar::add-page:horizontal {
+    background: transparent;
+}</string>
+           </property>
           </widget>
          </item>
         </layout>

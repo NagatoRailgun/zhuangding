@@ -67,7 +67,7 @@ void OptionPage::loadOptionSlot()
         ui->pushButton_10->click();
     }else if(options.getGender() == OptionClass::GENDER_TYPE_MALE){
         ui->pushButton_8->click();
-    }else if(options.getGender() == OptionClass::GENDER_TYPEFEMALE){
+    }else if(options.getGender() == OptionClass::GENDER_TYPE_FEMALE){
         ui->pushButton_9->click();
     }
 }
@@ -97,7 +97,7 @@ void OptionPage::on_pushButton_clicked()
     }else if(ui->pushButton_8->isChecked()){
         options.setGender(OptionClass::GENDER_TYPE_MALE);
     }else if(ui->pushButton_9->isChecked()){
-        options.setGender(OptionClass::GENDER_TYPEFEMALE);
+        options.setGender(OptionClass::GENDER_TYPE_FEMALE);
     }
     serviceOption->setOption(options);
 }

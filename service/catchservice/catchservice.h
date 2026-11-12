@@ -37,6 +37,7 @@ private:
     QList<int> makeStudentIdPool();//做成学生id抽取池
     SelectStudentData makeCatchStudentData(int studentId,QList<int>idPool);
     int countChance(int studentId,QList<int>idPool);
+    QList<int> removeIdfromPool(int studentId,QList<int>idPool);
 signals:
     void signalCatchStudent(int pos,int studentId);
     void signalCatchStudentAdd(int studentId);

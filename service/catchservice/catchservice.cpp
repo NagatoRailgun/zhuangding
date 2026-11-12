@@ -1,6 +1,7 @@
 #include<QRandomGenerator>
 #include "catchservice.h"
 #include "studentservice/studentservice.h"
+#include "optionservice/optionservice.h"
 
 CatchService::CatchService(QObject *parent)
     : BasicService{parent}
@@ -66,8 +67,10 @@ void CatchService::catch1Time()
     qDebug()<<"["<<serviceName<<"]"<<tr("make random number:")<<rnum;
     SelectStudentData catchData = makeCatchStudentData(studentIdPool[rnum],studentIdPool);
     nowSelectedStudentIdList.push_back(catchData);
-    StudentService::getInstance()->countSelect(studentIdPool[rnum]);//抽中统计更新
-
+    OptionClass opt = OptionService::getInstance()->getOption();
+    if(opt.getInheritRepeat()==OptionClass::INHERITREPEAT_TYPETYPE_ABLE){
+        StudentService::getInstance()->countSelect(studentIdPool[rnum]);//抽中统计更新
+    }
     emit signalCatchStudent(0,nowSelectedStudentIdList[0].studentId);
 }
 
@@ -97,9 +100,12 @@ void CatchService::catch1TimeRepeatless()
     qDebug()<<"["<<serviceName<<"]"<<tr("make random number:")<<rnum;
     SelectStudentData catchData = makeCatchStudentData(studentIdPool2[rnum],studentIdPool2);
     nowSelectedStudentIdList.push_back(catchData);
-    StudentService::getInstance()->countSelect(studentIdPool2[rnum]);//抽中统计更新
+    OptionClass opt = OptionService::getInstance()->getOption();
+    if(opt.getInheritRepeat()==OptionClass::INHERITREPEAT_TYPETYPE_ABLE){
+        StudentService::getInstance()->countSelect(studentIdPool2[rnum]);//抽中统计更新
+    }
     //抽到一个就把id池里的id丢掉
-    studentIdPool2.remove(rnum);
+    studentIdPool2 = removeIdfromPool(studentIdPool2[rnum],studentIdPool2);
     emit signalCatchStudent(0,nowSelectedStudentIdList[0].studentId);
 }
 
@@ -117,15 +123,18 @@ void CatchService::catch10Times()
         return;
     }
     qDebug()<<"["<<serviceName<<"]"<<tr("10 times catch started");
-    for(int i = 0; i<10; i++){
+    for(int i = 0; i<10 && studentIdPool.count(); i++){
         rnum = QRandomGenerator::global()->bounded(0,studentIdPool.count());
         qDebug()<<"["<<serviceName<<"]"<<tr("now student total:")<<nStudentNum;
         qDebug()<<"["<<serviceName<<"]"<<tr("make ")<<(i+1)<<tr(" time random number:")<<rnum;
         SelectStudentData catchData = makeCatchStudentData(studentIdPool[rnum],studentIdPool);
         nowSelectedStudentIdList.push_back(catchData);
-        StudentService::getInstance()->countSelect(studentIdPool[rnum]);//抽中统计更新
+        OptionClass opt = OptionService::getInstance()->getOption();
+        if(opt.getInheritRepeat()==OptionClass::INHERITREPEAT_TYPETYPE_ABLE){
+            StudentService::getInstance()->countSelect(studentIdPool[rnum]);//抽中统计更新
+        }
         //抽到一个就把id池里的id丢掉
-        studentIdPool.remove(rnum);
+        studentIdPool = removeIdfromPool(studentIdPool[rnum],studentIdPool);
     }
     emit signalCatchStudent(0,nowSelectedStudentIdList[0].studentId);
 }
@@ -155,11 +164,25 @@ void CatchService::catchMoreStart()
     qDebug()<<"["<<serviceName<<"]"<<tr("make")<<nowSelectedStudentIdList.count()+1<<tr("time random number:")<<rnum;
     SelectStudentData catchData = makeCatchStudentData(studentIdPool[rnum],studentIdPool);
     nowSelectedStudentIdList.push_back(catchData);
-    StudentService::getInstance()->countSelect(studentIdPool[rnum]);//抽中统计更新
+    OptionClass opt = OptionService::getInstance()->getOption();
+    if(opt.getInheritRepeat()==OptionClass::INHERITREPEAT_TYPETYPE_ABLE){
+        StudentService::getInstance()->countSelect(studentIdPool[rnum]);//抽中统计更新
+    }
     //抽到一个就把id池里的id丢掉
-    studentIdPool.remove(rnum);
+    studentIdPool = removeIdfromPool(studentIdPool[rnum],studentIdPool);
 
     emit signalCatchStudent(nowSelectedStudentIdList.count()-1,nowSelectedStudentIdList[nowSelectedStudentIdList.count()-1].studentId);
+}
+
+QList<int> CatchService::removeIdfromPool(int studentId,QList<int>idPool)
+{
+    for(int i = 0;i<idPool.count();i++){
+        if(idPool[i] == studentId){
+            idPool.removeAt(i);
+            i--;
+        }
+    }
+    return idPool;
 }
 
 void CatchService::catchMoreEnd()
@@ -200,7 +223,46 @@ void CatchService::addSelectStudentToList(int pos)
 
 QList<int> CatchService::makeStudentIdPool()
 {
+    int maxCount = 0;
+    int addTime;
+    OptionClass opt = OptionService::getInstance()->getOption();
     QList<int> pool = StudentService::getInstance()->getNowStudentId();
+    QList<int> pool2;
+    for(int i = 0;i<pool.count();i++){
+        StudentClass data = StudentService::getInstance()->getStudentDataById(pool[i]);
+        if(opt.getGender()==OptionClass::GENDER_TYPE_MALE && data.getStudentGender() != StudentClass::GENDER_STATUS_MALE){
+            pool.removeAt(i);
+            i--;
+            continue;
+        }else if(opt.getGender()==OptionClass::GENDER_TYPE_FEMALE && data.getStudentGender() != StudentClass::GENDER_STATUS_FEMALE){
+            pool.removeAt(i);
+            i--;
+            continue;
+        }
+        if(opt.getPriority()==OptionClass::PRIORITY_TYPE_UNSELECTED){
+            if(maxCount<data.getSelectedTimes()){
+                maxCount = data.getSelectedTimes();
+            }
+        }else if(opt.getPriority()==OptionClass::PRIORITY_TYPE_LEVEL){
+            if(maxCount<data.getSelectLevel()){
+                maxCount = data.getSelectLevel();
+            }
+        }
+    }
+    if(opt.getPriority()==OptionClass::PRIORITY_TYPE_UNSELECTED || opt.getPriority()==OptionClass::PRIORITY_TYPE_LEVEL){
+        for(int i = 0;i<pool.count();i++){
+            StudentClass data = StudentService::getInstance()->getStudentDataById(pool[i]);
+            if(opt.getPriority()==OptionClass::PRIORITY_TYPE_UNSELECTED){
+                addTime = maxCount-data.getSelectedTimes();
+            }else if(opt.getPriority()==OptionClass::PRIORITY_TYPE_LEVEL){
+                addTime = maxCount-data.getSelectLevel();
+            }
+            for(int j =addTime;j>0;j--){
+                pool2.push_back(data.getStudentId());
+            }
+        }
+        pool = pool+pool2;
+    }
     return pool;
 }
 

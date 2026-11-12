@@ -17,7 +17,7 @@ public:
     typedef enum{
         GENDER_TYPE_ALL,//全部
         GENDER_TYPE_MALE,//男生
-        GENDER_TYPEFEMALE, //女生
+        GENDER_TYPE_FEMALE, //女生
     }GENDER_TYPE;
 public:
     OptionClass();

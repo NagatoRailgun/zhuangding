@@ -7,6 +7,10 @@ HistroyPage::HistroyPage(QWidget *parent):
     ui(new Ui::HistroyPage)
 {
     ui->setupUi(this);
+    ui->tableView->verticalHeader()->hide();
+    ui->tableView->setAlternatingRowColors(true);
+    ui->tableView->horizontalHeader()->setHighlightSections(false);
+    ui->tableView->horizontalHeader()->setSectionResizeMode(QHeaderView::ResizeToContents);
     initService();
     connectSignal();
     ui->pushButton_10->click();
