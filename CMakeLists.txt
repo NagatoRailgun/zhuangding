@@ -29,6 +29,10 @@ set(PROJECT_SOURCES
         component/catchpage/catchpage.h
         component/catchpage/catchpage.cpp
         component/catchpage/catchpage.ui
+        #中奖名单控件
+        component/catchpage/catchnamewidget.h
+        component/catchpage/catchnamewidget.cpp
+        component/catchpage/catchnamewidget.ui
         #载入页
         component/loadpage/loadpage.h
         component/loadpage/loadpage.cpp

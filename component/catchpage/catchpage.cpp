@@ -58,10 +58,24 @@ void CatchPage::signalCatchStudentAddSlot(int)
 {
     QString text;
     QList<CatchService::SelectStudentData> data = serviceCatch->getSelectedStudentList();
-    ui->listWidget->clear();
-    for(int i = 0; i<data.count(); i++){
-        text = QString::number(data[i].num) +"."+data[i].name;
-        ui->listWidget->addItem(text);
+    for(int i = 0;i<nameList.count();i++){
+        delete nameList[i];
+        nameList.removeAt(i);
+        i--;
+    }
+    for(int i = data.count()-1; i>=0; i--){
+        CatchNameWidget * nameWidget = new CatchNameWidget(ui->widget_6);
+        ui->widget_6->layout()->addWidget(nameWidget);
+        nameWidget->setName(data[i].name);
+        nameWidget->setChance(data[i].chance);
+        nameList.push_back(nameWidget);
+    }
+    for(int i = 0;i<nameList.count();i++){
+        if(i == 0){
+            nameList[i]->setColor(true);
+        }else{
+            nameList[i]->setColor(false);
+        }
     }
 }
 

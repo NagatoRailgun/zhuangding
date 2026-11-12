@@ -8,8 +8,9 @@ class CatchService : public BasicService
     Q_OBJECT
 public:
     typedef struct {
-        int num;
+        int studentId;
         QString name;
+        int chance;
     }SelectStudentData;
 public:
     ~CatchService();
@@ -27,12 +28,15 @@ public:
 private:
     static CatchService * instance;
     int  moreCatchflag = 0;
-    QList<int>selectedStudentIdList;
-    QList<int>nowSelectedStudentIdList;
+    QList<SelectStudentData>selectedStudentIdList;
+    QList<SelectStudentData>nowSelectedStudentIdList;
     QList<int>studentIdPool;//多次抽取池
     QList<int>studentIdPool2;//单次不可重复抽取专用池
 private:
     explicit CatchService(QObject *parent = nullptr);
+    QList<int> makeStudentIdPool();//做成学生id抽取池
+    SelectStudentData makeCatchStudentData(int studentId,QList<int>idPool);
+    int countChance(int studentId,QList<int>idPool);
 signals:
     void signalCatchStudent(int pos,int studentId);
     void signalCatchStudentAdd(int studentId);

@@ -6,6 +6,7 @@
 #include "studentservice/studentservice.h"
 #include "catchservice/catchservice.h"
 #include "optionservice/optionservice.h"
+#include "catchnamewidget.h"
 
 namespace Ui {
 class CatchPage;
@@ -26,6 +27,7 @@ private:
     int showNum;
     int selectedStudentId = -1;
     int selectedStudentPos = -1;
+    QList<CatchNameWidget *> nameList;
 private:
     void initService() override;
     void connectSignal() override;

@@ -55,7 +55,7 @@ void CatchService::catch1Time()
     moreCatchflag = 0;
     nowSelectedStudentIdList.clear();
     nStudentNum = StudentService::getInstance()->getNowStudentNum();
-    studentIdPool = StudentService::getInstance()->getNowStudentId();
+    studentIdPool = makeStudentIdPool();
     if(!nStudentNum){
         qDebug()<<"["<<serviceName<<"]"<<tr("no student");
         return;
@@ -64,10 +64,11 @@ void CatchService::catch1Time()
     rnum = QRandomGenerator::global()->bounded(0,studentIdPool.count());
     qDebug()<<"["<<serviceName<<"]"<<tr("now student total:")<<nStudentNum;
     qDebug()<<"["<<serviceName<<"]"<<tr("make random number:")<<rnum;
-    nowSelectedStudentIdList.push_back(studentIdPool[rnum]);
+    SelectStudentData catchData = makeCatchStudentData(studentIdPool[rnum],studentIdPool);
+    nowSelectedStudentIdList.push_back(catchData);
     StudentService::getInstance()->countSelect(studentIdPool[rnum]);//抽中统计更新
 
-    emit signalCatchStudent(0,nowSelectedStudentIdList[0]);
+    emit signalCatchStudent(0,nowSelectedStudentIdList[0].studentId);
 }
 
 void CatchService::catch1TimeRepeatless()
@@ -84,7 +85,7 @@ void CatchService::catch1TimeRepeatless()
     }
     if(!studentIdPool2.count()){
         //抽光就重新补充
-        studentIdPool2 = StudentService::getInstance()->getNowStudentId();
+        studentIdPool2 = makeStudentIdPool();
     }
     if(!studentIdPool2.count()){
         qDebug()<<"["<<serviceName<<"]"<<tr("no student");
@@ -94,11 +95,12 @@ void CatchService::catch1TimeRepeatless()
     rnum = QRandomGenerator::global()->bounded(0,studentIdPool2.count());
     qDebug()<<"["<<serviceName<<"]"<<tr("now student total:")<<nStudentNum;
     qDebug()<<"["<<serviceName<<"]"<<tr("make random number:")<<rnum;
-    nowSelectedStudentIdList.push_back(studentIdPool2[rnum]);
+    SelectStudentData catchData = makeCatchStudentData(studentIdPool2[rnum],studentIdPool2);
+    nowSelectedStudentIdList.push_back(catchData);
     StudentService::getInstance()->countSelect(studentIdPool2[rnum]);//抽中统计更新
     //抽到一个就把id池里的id丢掉
     studentIdPool2.remove(rnum);
-    emit signalCatchStudent(0,nowSelectedStudentIdList[0]);
+    emit signalCatchStudent(0,nowSelectedStudentIdList[0].studentId);
 }
 
 void CatchService::catch10Times()
@@ -109,7 +111,7 @@ void CatchService::catch10Times()
     moreCatchflag = 0;
     nowSelectedStudentIdList.clear();
     nStudentNum = StudentService::getInstance()->getNowStudentNum();
-    studentIdPool = StudentService::getInstance()->getNowStudentId();
+    studentIdPool = makeStudentIdPool();
     if(!studentIdPool.count()){
         qDebug()<<"["<<serviceName<<"]"<<tr("no student");
         return;
@@ -119,20 +121,19 @@ void CatchService::catch10Times()
         rnum = QRandomGenerator::global()->bounded(0,studentIdPool.count());
         qDebug()<<"["<<serviceName<<"]"<<tr("now student total:")<<nStudentNum;
         qDebug()<<"["<<serviceName<<"]"<<tr("make ")<<(i+1)<<tr(" time random number:")<<rnum;
-
-        nowSelectedStudentIdList.push_back(studentIdPool[rnum]);
+        SelectStudentData catchData = makeCatchStudentData(studentIdPool[rnum],studentIdPool);
+        nowSelectedStudentIdList.push_back(catchData);
         StudentService::getInstance()->countSelect(studentIdPool[rnum]);//抽中统计更新
         //抽到一个就把id池里的id丢掉
         studentIdPool.remove(rnum);
     }
-    emit signalCatchStudent(0,nowSelectedStudentIdList[0]);
+    emit signalCatchStudent(0,nowSelectedStudentIdList[0].studentId);
 }
 
 void CatchService::catchMoreStart()
 {
     int rnum;
     int nStudentNum;
-    int id;
 
     nStudentNum = StudentService::getInstance()->getNowStudentNum();
     if(!nStudentNum){
@@ -140,7 +141,7 @@ void CatchService::catchMoreStart()
         return;
     }
     if(!moreCatchflag){
-        studentIdPool = StudentService::getInstance()->getNowStudentId();
+        studentIdPool = makeStudentIdPool();
         nowSelectedStudentIdList.clear();
         moreCatchflag = 1;
         qDebug()<<"["<<serviceName<<"]"<<tr("more catch started");
@@ -152,14 +153,13 @@ void CatchService::catchMoreStart()
     rnum = QRandomGenerator::global()->bounded(0,studentIdPool.count());
     qDebug()<<"["<<serviceName<<"]"<<tr("now student total:")<<nStudentNum;
     qDebug()<<"["<<serviceName<<"]"<<tr("make")<<nowSelectedStudentIdList.count()+1<<tr("time random number:")<<rnum;
-
-    nowSelectedStudentIdList.push_back(studentIdPool[rnum]);
+    SelectStudentData catchData = makeCatchStudentData(studentIdPool[rnum],studentIdPool);
+    nowSelectedStudentIdList.push_back(catchData);
     StudentService::getInstance()->countSelect(studentIdPool[rnum]);//抽中统计更新
-    id = studentIdPool[rnum];
     //抽到一个就把id池里的id丢掉
     studentIdPool.remove(rnum);
 
-    emit signalCatchStudent(nowSelectedStudentIdList.count()-1,id);
+    emit signalCatchStudent(nowSelectedStudentIdList.count()-1,nowSelectedStudentIdList[nowSelectedStudentIdList.count()-1].studentId);
 }
 
 void CatchService::catchMoreEnd()
@@ -180,32 +180,56 @@ void CatchService::addSelectStudentToList(int pos)
     }
     if(!moreCatchflag){
         //普通抓取时
-        qDebug()<<"["<<serviceName<<"]"<<tr("catch students add:")<<nowSelectedStudentIdList[pos];
+        qDebug()<<"["<<serviceName<<"]"<<tr("catch students add:")<<nowSelectedStudentIdList[pos].studentId;
         selectedStudentIdList.push_back(nowSelectedStudentIdList[pos]);
-        emit signalCatchStudentAdd(nowSelectedStudentIdList[pos]);
+        emit signalCatchStudentAdd(nowSelectedStudentIdList[pos].studentId);
         if(pos < nowSelectedStudentIdList.count()-1){
-            emit signalCatchStudent(pos+1,nowSelectedStudentIdList[pos+1]);
+            emit signalCatchStudent(pos+1,nowSelectedStudentIdList[pos+1].studentId);
         }
     }else{
         //持续抓取时
         nStudentNum = StudentService::getInstance()->getNowStudentNum();
-        qDebug()<<"["<<serviceName<<"]"<<tr("catch students add:")<<nowSelectedStudentIdList[pos];
+        qDebug()<<"["<<serviceName<<"]"<<tr("catch students add:")<<nowSelectedStudentIdList[pos].studentId;
         selectedStudentIdList.push_back(nowSelectedStudentIdList[pos]);
-        emit signalCatchStudentAdd(nowSelectedStudentIdList[pos]);
+        emit signalCatchStudentAdd(nowSelectedStudentIdList[pos].studentId);
         if(pos < nStudentNum){
             catchMoreStart();
         }
     }
 }
 
+QList<int> CatchService::makeStudentIdPool()
+{
+    QList<int> pool = StudentService::getInstance()->getNowStudentId();
+    return pool;
+}
+
 QList<CatchService::SelectStudentData> CatchService::getSelectedStudentList()
 {
-    QList<SelectStudentData>dataList;
+    return selectedStudentIdList;
+}
+
+CatchService::SelectStudentData CatchService::makeCatchStudentData(int studentId,QList<int>idPool)
+{
     SelectStudentData data;
-    for(int i = 0; i<selectedStudentIdList.count(); i++){
-        data.num = i+1;
-        data.name =  StudentService::getInstance()->getStudentName(selectedStudentIdList[i]);
-        dataList.push_back(data);
+    data.studentId = studentId;
+    data.name = StudentService::getInstance()->getStudentName(studentId);
+    data.chance = countChance(studentId,idPool);
+    return data;
+}
+
+int CatchService::countChance(int studentId,QList<int>idPool)
+{
+    int count = 0;
+    for(int i = 0;i<idPool.count();i++){
+        if(idPool[i] == studentId ){
+            count++;
+        }
     }
-    return dataList;
+    if(idPool.count()){
+        count = count*10000/idPool.count();
+    }else{
+        count = 0;
+    }
+    return count;
 }

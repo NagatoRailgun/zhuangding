@@ -189,7 +189,7 @@
                </size>
               </property>
               <property name="text">
-               <string>Priority:</string>
+               <string>Select Priority:</string>
               </property>
               <property name="alignment">
                <set>Qt::AlignRight|Qt::AlignTrailing|Qt::AlignVCenter</set>
@@ -425,7 +425,7 @@ QPushButton:pressed {
                </size>
               </property>
               <property name="text">
-               <string>‌Inherit Repeat:</string>
+               <string>‌Inherit Select Count:</string>
               </property>
               <property name="alignment">
                <set>Qt::AlignRight|Qt::AlignTrailing|Qt::AlignVCenter</set>
@@ -612,7 +612,7 @@ QPushButton:pressed {
             <item>
              <widget class="QLabel" name="label_5">
               <property name="text">
-               <string>Gender:</string>
+               <string>Gender Range:</string>
               </property>
               <property name="alignment">
                <set>Qt::AlignRight|Qt::AlignTrailing|Qt::AlignVCenter</set>
