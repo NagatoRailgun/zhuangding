@@ -24,6 +24,7 @@ HistroyPage::~HistroyPage()
 void HistroyPage::initService()
 {
     serviceHistroy = HistroyService::getInstance();
+    serviceCatch = CatchService::getInstance();
 }
 
 void HistroyPage::connectSignal()
@@ -33,10 +34,11 @@ void HistroyPage::connectSignal()
 
 void HistroyPage::showStudentData(QList<StudentClass> students)
 {
+    double persent;
     QString gender;
     QStandardItemModel * model = new QStandardItemModel(0,6,this);
     // 设置表头
-    model->setHorizontalHeaderLabels({tr("ID"),tr("Name"),tr("Gender"),tr("Priority"),tr("Selected Count"),tr("Last Selected")});
+    model->setHorizontalHeaderLabels({tr("ID"),tr("Name"),tr("Gender"),tr("Priority"),tr("Selected Count"),tr("Next Probability"),tr("Last Selected")});
     ui->tableView->setModel(model);
     ui->tableView->horizontalHeader()->setStretchLastSection(true);
     for(int i = 0;i<students.count();i++){
@@ -46,11 +48,13 @@ void HistroyPage::showStudentData(QList<StudentClass> students)
         }else{
             gender = tr("Female");
         }
+        persent = (double)serviceCatch->getCatchProbability(students[i].getStudentId())/100.00;
         row<<new QStandardItem(QString::number(students[i].getStudentShowId()))
               <<new QStandardItem(students[i].getStudentName())
               <<new QStandardItem(gender)
               <<new QStandardItem(QString::number(students[i].getSelectLevel()))
               <<new QStandardItem(QString::number(students[i].getSelectedTimes()))
+              <<new QStandardItem(QString::number(persent,'f',2)+"%")
               <<new QStandardItem(students[i].getSelectedDateTime().toString("yyyy-MM-dd hh:mm:ss"));
         model->appendRow(row);
     }

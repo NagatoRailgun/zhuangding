@@ -6,9 +6,8 @@ class OptionClass
 {
 public:
     typedef enum{
-        PRIORITY_TYPE_RANDOM,//随机
-        PRIORITY_TYPE_UNSELECTED,//未选中的
-        PRIORITY_TYPE_LEVEL,//优先级设置
+        PRIORITY_TYPE_ABLE,//启用
+        PRIORITY_TYPE_DISABLE,//禁用
     }PRIORITY_TYPE;
     typedef enum{
         INHERITREPEAT_TYPETYPE_ABLE,//重复次数继承
@@ -21,9 +20,12 @@ public:
     }GENDER_TYPE;
 public:
     OptionClass();
-    PRIORITY_TYPE getPriority();
-    void setPriority(PRIORITY_TYPE type);
-    void setPriority(int type);
+    PRIORITY_TYPE getLevelPriority();
+    void setLevelPriority(PRIORITY_TYPE type);
+    void setLevelPriority(int type);
+    PRIORITY_TYPE getCountPriority();
+    void setCountPriority(PRIORITY_TYPE type);
+    void setCountPriority(int type);
     INHERITREPEAT_TYPE getInheritRepeat();
     void setInheritRepeat(INHERITREPEAT_TYPE type);
     void setInheritRepeat(int type);
@@ -31,7 +33,8 @@ public:
     void setGender(GENDER_TYPE type);
     void setGender(int type);
 private:
-    PRIORITY_TYPE priority;
+    PRIORITY_TYPE countPriority;
+    PRIORITY_TYPE levelPriority;
     INHERITREPEAT_TYPE inheritRepeat;
     GENDER_TYPE gender;
 };

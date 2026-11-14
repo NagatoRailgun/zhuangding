@@ -47,7 +47,8 @@ void OptionService::beforeCloseService()
 
 void OptionService::initOption()
 {
-    options.setPriority(OptionClass::PRIORITY_TYPE_RANDOM);
+    options.setLevelPriority(OptionClass::PRIORITY_TYPE_DISABLE);
+    options.setCountPriority(OptionClass::PRIORITY_TYPE_DISABLE);
     options.setInheritRepeat(OptionClass::INHERITREPEAT_TYPETYPE_ABLE);
     options.setGender(OptionClass::GENDER_TYPE_ALL);
 }
@@ -68,7 +69,8 @@ QString OptionService::getAllDataToJson()
 {
     QJsonDocument ret;
     QJsonObject data;
-    data.insert("priority",options.getPriority());
+    data.insert("levelPriority",options.getLevelPriority());
+    data.insert("countPriority",options.getCountPriority());
     data.insert("inheritRepeat",options.getInheritRepeat());
     data.insert("gender",options.getGender());
     ret.setObject(data);
@@ -84,7 +86,8 @@ void OptionService::loadFileData()
         return;
     }
     dataObj = dt.object();
-    options.setPriority(dataObj["priority"].toInt());
+    options.setLevelPriority(dataObj["levelPriority"].toInt());
+    options.setCountPriority(dataObj["countPriority"].toInt());
     options.setInheritRepeat(dataObj["inheritRepeat"].toInt());
     options.setGender(dataObj["gender"].toInt());
     emit signalOptionChange();

@@ -51,12 +51,15 @@ void OptionPage::loadClassComboBoxSlot()
 void OptionPage::loadOptionSlot()
 {
     OptionClass options =  serviceOption->getOption();
-    if(options.getPriority() == OptionClass::PRIORITY_TYPE_RANDOM){
+    if(options.getCountPriority() == OptionClass::PRIORITY_TYPE_DISABLE){
         ui->pushButton_3->click();
-    }else if(options.getPriority() == OptionClass::PRIORITY_TYPE_UNSELECTED){
+    }else if(options.getCountPriority() == OptionClass::PRIORITY_TYPE_ABLE){
         ui->pushButton_4->click();
-    }else if(options.getPriority() == OptionClass::PRIORITY_TYPE_LEVEL){
-        ui->pushButton_11->click();
+    }
+    if(options.getLevelPriority() == OptionClass::PRIORITY_TYPE_DISABLE){
+        ui->pushButton_5->click();
+    }else if(options.getLevelPriority() == OptionClass::PRIORITY_TYPE_ABLE){
+        ui->pushButton_12->click();
     }
     if(options.getInheritRepeat() == OptionClass::INHERITREPEAT_TYPETYPE_ABLE){
         ui->pushButton_6->click();
@@ -81,11 +84,14 @@ void OptionPage::on_pushButton_clicked()
     }
     OptionClass options;
     if(ui->pushButton_3->isChecked()){
-        options.setPriority(OptionClass::PRIORITY_TYPE_RANDOM);
+        options.setCountPriority(OptionClass::PRIORITY_TYPE_DISABLE);
     }else if(ui->pushButton_4->isChecked()){
-        options.setPriority(OptionClass::PRIORITY_TYPE_UNSELECTED);
-    }else if(ui->pushButton_11->isChecked()){
-        options.setPriority(OptionClass::PRIORITY_TYPE_LEVEL);
+        options.setCountPriority(OptionClass::PRIORITY_TYPE_ABLE);
+    }
+    if(ui->pushButton_5->isChecked()){
+        options.setLevelPriority(OptionClass::PRIORITY_TYPE_DISABLE);
+    }else if(ui->pushButton_12->isChecked()){
+        options.setLevelPriority(OptionClass::PRIORITY_TYPE_ABLE);
     }
     if(ui->pushButton_6->isChecked()){
         options.setInheritRepeat(OptionClass::INHERITREPEAT_TYPETYPE_ABLE);

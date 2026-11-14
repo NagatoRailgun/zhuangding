@@ -3,6 +3,7 @@
 
 #include "basicpage/basicpage.h"
 #include "histroyservice/histroyservice.h"
+#include "catchservice/catchservice.h"
 
 namespace Ui {
 class HistroyPage;
@@ -17,6 +18,7 @@ public:
 private:
     Ui::HistroyPage *ui;
     HistroyService * serviceHistroy = nullptr;
+    CatchService * serviceCatch = nullptr;
 private:
     void initService() override;
     void connectSignal() override;

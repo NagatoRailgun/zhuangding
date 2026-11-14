@@ -223,11 +223,11 @@ void CatchService::addSelectStudentToList(int pos)
 
 QList<int> CatchService::makeStudentIdPool()
 {
-    int maxCount = 0;
-    int addTime;
     OptionClass opt = OptionService::getInstance()->getOption();
     QList<int> pool = StudentService::getInstance()->getNowStudentId();
     QList<int> pool2;
+    QList<CatchWeight> selectWeightList;
+    QList<CatchWeight> levelWeightList;
     for(int i = 0;i<pool.count();i++){
         StudentClass data = StudentService::getInstance()->getStudentDataById(pool[i]);
         if(opt.getGender()==OptionClass::GENDER_TYPE_MALE && data.getStudentGender() != StudentClass::GENDER_STATUS_MALE){
@@ -239,31 +239,76 @@ QList<int> CatchService::makeStudentIdPool()
             i--;
             continue;
         }
-        if(opt.getPriority()==OptionClass::PRIORITY_TYPE_UNSELECTED){
-            if(maxCount<data.getSelectedTimes()){
-                maxCount = data.getSelectedTimes();
-            }
-        }else if(opt.getPriority()==OptionClass::PRIORITY_TYPE_LEVEL){
-            if(maxCount<data.getSelectLevel()){
-                maxCount = data.getSelectLevel();
-            }
+        makeWeightListMinCount(selectWeightList,data.getSelectedTimes(),data.getSelectedTimes());
+        makeWeightListMinCount(levelWeightList,data.getSelectLevel(),data.getSelectedTimes());
+    }
+    //没有优先级设置的话直接退出
+    if(opt.getLevelPriority()!=OptionClass::PRIORITY_TYPE_ABLE &&
+       opt.getCountPriority()!=OptionClass::PRIORITY_TYPE_ABLE){
+        return pool;
+    }
+    //计算权重
+    for(int i = 0;i<pool.count();i++){
+        StudentClass data = StudentService::getInstance()->getStudentDataById(pool[i]);
+        makeWeightListWeight(selectWeightList,data.getSelectedTimes(),data.getSelectedTimes());
+        makeWeightListWeight(levelWeightList,data.getSelectLevel(),data.getSelectedTimes());
+    }
+    //抽取次数越多被抽次数越少、优先级越高的学生抽中概率越大
+    for(int i = 0;i<pool.count();i++){
+        StudentClass data = StudentService::getInstance()->getStudentDataById(pool[i]);
+        if(opt.getCountPriority()==OptionClass::PRIORITY_TYPE_ABLE){
+            makeWeightPool(pool2,selectWeightList,data.getStudentId(),data.getSelectedTimes());
+        }
+        if(opt.getLevelPriority()==OptionClass::PRIORITY_TYPE_ABLE){
+            makeWeightPool(pool2,levelWeightList,data.getStudentId(),data.getSelectLevel());
         }
     }
-    if(opt.getPriority()==OptionClass::PRIORITY_TYPE_UNSELECTED || opt.getPriority()==OptionClass::PRIORITY_TYPE_LEVEL){
-        for(int i = 0;i<pool.count();i++){
-            StudentClass data = StudentService::getInstance()->getStudentDataById(pool[i]);
-            if(opt.getPriority()==OptionClass::PRIORITY_TYPE_UNSELECTED){
-                addTime = maxCount-data.getSelectedTimes();
-            }else if(opt.getPriority()==OptionClass::PRIORITY_TYPE_LEVEL){
-                addTime = maxCount-data.getSelectLevel();
-            }
-            for(int j =addTime;j>0;j--){
-                pool2.push_back(data.getStudentId());
-            }
-        }
-        pool = pool+pool2;
-    }
+    pool = pool+pool2;
     return pool;
+}
+
+void CatchService::makeWeightPool(QList<int>&idPool,QList<CatchWeight>&list,int studentId,int keyNum)
+{
+    for(int i = 0;i<list.count();i++){
+        if(list[i].keyNum != keyNum){
+            continue;
+        }
+        for(int j = list[i].weight;j>0;j--){
+            idPool.push_back(studentId);
+        }
+        break;
+    }
+}
+
+void CatchService::makeWeightListMinCount(QList<CatchWeight>&list,int keyNumber,int selectTimes)
+{
+    int minweight = -1;
+    bool existFlag = 0;
+    for(int i = 0;i<list.count();i++){
+        if(list[i].keyNum == keyNumber){
+            existFlag = true;
+            if(selectTimes<list[i].minCount){
+                list[i].minCount = selectTimes;
+            }
+            break;
+        }
+    }
+    if(!existFlag){
+        CatchWeight weight;
+        weight.weight = 0;
+        weight.keyNum = keyNumber;
+        weight.minCount = selectTimes;
+        list.push_back(weight);
+    }
+}
+
+void CatchService::makeWeightListWeight(QList<CatchWeight>&list,int keyNum,int selectTimes)
+{
+    for(int i = 0;i<list.count();i++){
+        if(list[i].keyNum<keyNum){
+            list[i].weight += selectTimes-list[i].minCount;
+        }
+    }
 }
 
 QList<CatchService::SelectStudentData> CatchService::getSelectedStudentList()
@@ -294,4 +339,12 @@ int CatchService::countChance(int studentId,QList<int>idPool)
         count = 0;
     }
     return count;
+}
+
+int CatchService::getCatchProbability(int studentId)
+{
+    int persent = 0;
+    QList<int> pool = makeStudentIdPool();
+    persent = countChance(studentId,pool);
+    return persent;
 }

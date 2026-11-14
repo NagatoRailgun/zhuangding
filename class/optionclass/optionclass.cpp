@@ -5,24 +5,41 @@ OptionClass::OptionClass()
 
 }
 
-OptionClass::PRIORITY_TYPE OptionClass::getPriority()
+OptionClass::PRIORITY_TYPE OptionClass::getLevelPriority()
 {
-    return priority;
+    return levelPriority;
 }
 
-void OptionClass::setPriority(PRIORITY_TYPE type)
+void OptionClass::setLevelPriority(PRIORITY_TYPE type)
 {
-    priority = type;
+    levelPriority = type;
 }
 
-void OptionClass::setPriority(int type)
+OptionClass::PRIORITY_TYPE OptionClass::getCountPriority()
 {
-    if(type == PRIORITY_TYPE_UNSELECTED){
-        priority = PRIORITY_TYPE_UNSELECTED;
-    }else if(type == PRIORITY_TYPE_LEVEL){
-        priority = PRIORITY_TYPE_LEVEL;
+    return countPriority;
+}
+
+void OptionClass::setCountPriority(PRIORITY_TYPE type)
+{
+    countPriority = type;
+}
+
+void OptionClass::setLevelPriority(int type)
+{
+    if(type == PRIORITY_TYPE_ABLE){
+        levelPriority = PRIORITY_TYPE_ABLE;
     }else{
-        priority = PRIORITY_TYPE_RANDOM;
+        levelPriority = PRIORITY_TYPE_DISABLE;
+    }
+}
+
+void OptionClass::setCountPriority(int type)
+{
+    if(type == PRIORITY_TYPE_ABLE){
+        countPriority = PRIORITY_TYPE_ABLE;
+    }else{
+        countPriority = PRIORITY_TYPE_DISABLE;
     }
 }
 

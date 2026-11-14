@@ -104,12 +104,15 @@ void CatchPage::showNameSlot()
 void CatchPage::showOptionSlot()
 {
     OptionClass options = serviceOption->getOption();
-    if(options.getPriority() == OptionClass::PRIORITY_TYPE_RANDOM){
-        ui->label_6->setText(tr("Priority:Random"));
-    }else if(options.getPriority() == OptionClass::PRIORITY_TYPE_UNSELECTED){
-        ui->label_6->setText(tr("Priority:Unselected"));
-    }else if(options.getPriority() == OptionClass::PRIORITY_TYPE_LEVEL){
-        ui->label_6->setText(tr("Priority:Level"));
+    if(options.getCountPriority() == OptionClass::PRIORITY_TYPE_ABLE){
+        ui->label_6->setText(tr("Count Priority:Able"));
+    }else if(options.getCountPriority() == OptionClass::PRIORITY_TYPE_DISABLE){
+        ui->label_6->setText(tr("Count Priority:Disable"));
+    }
+    if(options.getLevelPriority() == OptionClass::PRIORITY_TYPE_ABLE){
+        ui->label_15->setText(tr("Level Priority:Able"));
+    }else if(options.getLevelPriority() == OptionClass::PRIORITY_TYPE_DISABLE){
+        ui->label_15->setText(tr("Level Priority:Disable"));
     }
     if(options.getInheritRepeat() == OptionClass::INHERITREPEAT_TYPETYPE_ABLE){
         ui->label_7->setText(tr("Selected Count: Inherit"));
