@@ -13,10 +13,14 @@ public:
     void beforeCloseService() override;
     void saveData();
     void saveOption();
+    void saveCatch();
+    void deleteCatch(int classId);
     bool checkDataFile();
     bool checkOptionFile();
     QByteArray loadData();
     QByteArray loadOption();
+    QByteArray loadCatch();
+    void saveAllData();
 private:
     static FileService * instance;
 private:

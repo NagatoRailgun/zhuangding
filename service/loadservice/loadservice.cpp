@@ -108,6 +108,7 @@ void LoadService::deleteClass(QString className)
         qDebug()<<"["<<serviceName<<"]"<<tr("no class has been find");
         return;
     }
+    FileService::getInstance()->deleteCatch(classId);
     StudentService::getInstance()->deleteClass(classId);
     FileService::getInstance()->saveData();
 }

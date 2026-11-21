@@ -4,6 +4,7 @@
 #include "fileservice.h"
 #include "studentservice/studentservice.h"
 #include "optionservice/optionservice.h"
+#include "catchservice/catchservice.h"
 
 FileService::FileService(QObject *parent)
     : BasicService{parent}
@@ -37,8 +38,20 @@ void FileService::afterInitService()
 
 void FileService::beforeCloseService(){
     qDebug()<<"["<<serviceName<<"]"<<tr("service closing");
+    saveAllData();
+}
+
+void FileService::saveAllData()
+{
     saveData();//保存统计数据
     saveOption();//保存设置数据
+    saveCatch();//保存抓取数据
+}
+
+void FileService::deleteCatch(int classId)
+{
+    QString data = CatchService::getInstance()->getDeleteClassDataToJson(classId);
+    saveDataToFile(data,"catchdata",false);
 }
 
 void FileService::saveData()
@@ -50,7 +63,13 @@ void FileService::saveData()
 void FileService::saveOption()
 {
     QString data = OptionService::getInstance()->getAllDataToJson();
-    saveDataToFile(data,"optiondata",false);
+    saveDataToFile(data,"optiondata",data.isEmpty()||data=="");
+}
+
+void FileService::saveCatch()
+{
+    QString data = CatchService::getInstance()->getAllDataToJson();
+    saveDataToFile(data,"catchdata",data.isEmpty()||data=="");
 }
 
 void FileService::saveDataToFile(QString dataJsonString,QString fileName,bool isEmpty)
@@ -92,6 +111,11 @@ QByteArray FileService::loadData()
 QByteArray FileService::loadOption()
 {
     return loadDataFromFile("optiondata");
+}
+
+QByteArray FileService::loadCatch()
+{
+    return loadDataFromFile("catchdata");
 }
 
 QByteArray FileService::loadDataFromFile(QString fileName){

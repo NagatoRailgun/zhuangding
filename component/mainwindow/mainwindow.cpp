@@ -33,20 +33,22 @@ MainWindow::~MainWindow()
         serviceList[i]->beforeCloseService();
     }
     delete ui;
-    for(int i = 0;i<serviceList.length();i++){
-        delete serviceList[i];
+    if(serviceList.length()){
+        for(int i = serviceList.length() - 1;i>=0;i--){
+            delete serviceList[i];
+        }
     }
     serviceList.clear();
 }
 
 void MainWindow::initService()
 {
+    serviceList.append(OptionService::getInstance());
     serviceList.append(StudentService::getInstance());
     serviceList.append(CatchService::getInstance());  
     serviceList.append(LoadService::getInstance());
     serviceList.append(FileService::getInstance());
     serviceList.append(HistroyService::getInstance());
-    serviceList.append(OptionService::getInstance());
     for(int i = 0;i<serviceList.length();i++){
         serviceList[i]->afterInitService();
     }

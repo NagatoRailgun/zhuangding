@@ -503,3 +503,13 @@ void StudentService::loadTestStudent()
 
     classList[0].setStudentListPoint(&studentList);
 }
+
+bool StudentService::checkStudentExist(int studentId)
+{
+    for(int i = 0;i<studentList.count();i++){
+        if(studentList[i].getStudentId() == studentId){
+            return true;
+        }
+    }
+    return false;
+}

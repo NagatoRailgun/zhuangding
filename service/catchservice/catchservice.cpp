@@ -1,7 +1,11 @@
+#include <QJsonArray>
+#include <QJsonObject>
+#include <QJsonDocument>
 #include<QRandomGenerator>
 #include "catchservice.h"
 #include "studentservice/studentservice.h"
 #include "optionservice/optionservice.h"
+#include "fileservice/fileservice.h"
 
 CatchService::CatchService(QObject *parent)
     : BasicService{parent}
@@ -31,6 +35,7 @@ CatchService * CatchService::instance = nullptr;
 void CatchService::afterInitService()
 {
     cleanWaitingData();
+    loadFileData(studentIdPool2);
 }
 
 void CatchService::beforeCloseService(){
@@ -56,7 +61,7 @@ void CatchService::catch1Time()
     moreCatchflag = 0;
     nowSelectedStudentIdList.clear();
     nStudentNum = StudentService::getInstance()->getNowStudentNum();
-    studentIdPool = makeStudentIdPool();
+    studentIdPool = makeStudentIdPool(false);
     if(!nStudentNum){
         qDebug()<<"["<<serviceName<<"]"<<tr("no student");
         return;
@@ -88,7 +93,7 @@ void CatchService::catch1TimeRepeatless()
     }
     if(!studentIdPool2.count()){
         //抽光就重新补充
-        studentIdPool2 = makeStudentIdPool();
+        studentIdPool2 = makeStudentIdPool(false);
     }
     if(!studentIdPool2.count()){
         qDebug()<<"["<<serviceName<<"]"<<tr("no student");
@@ -117,7 +122,7 @@ void CatchService::catch10Times()
     moreCatchflag = 0;
     nowSelectedStudentIdList.clear();
     nStudentNum = StudentService::getInstance()->getNowStudentNum();
-    studentIdPool = makeStudentIdPool();
+    studentIdPool = makeStudentIdPool(false);
     if(!studentIdPool.count()){
         qDebug()<<"["<<serviceName<<"]"<<tr("no student");
         return;
@@ -150,7 +155,7 @@ void CatchService::catchMoreStart()
         return;
     }
     if(!moreCatchflag){
-        studentIdPool = makeStudentIdPool();
+        studentIdPool = makeStudentIdPool(false);
         nowSelectedStudentIdList.clear();
         moreCatchflag = 1;
         qDebug()<<"["<<serviceName<<"]"<<tr("more catch started");
@@ -221,7 +226,7 @@ void CatchService::addSelectStudentToList(int pos)
     }
 }
 
-QList<int> CatchService::makeStudentIdPool()
+QList<int> CatchService::makeStudentIdPool(bool needCatchTimesCheckFlag)
 {
     OptionClass opt = OptionService::getInstance()->getOption();
     QList<int> pool = StudentService::getInstance()->getNowStudentId();
@@ -243,8 +248,9 @@ QList<int> CatchService::makeStudentIdPool()
         makeWeightListMinCount(levelWeightList,data.getSelectLevel(),data.getSelectedTimes());
     }
     //没有优先级设置的话直接退出
-    if(opt.getLevelPriority()!=OptionClass::PRIORITY_TYPE_ABLE &&
-       opt.getCountPriority()!=OptionClass::PRIORITY_TYPE_ABLE){
+    if(!needCatchTimesCheckFlag ||
+       (opt.getLevelPriority()!=OptionClass::PRIORITY_TYPE_ABLE &&
+       opt.getCountPriority()!=OptionClass::PRIORITY_TYPE_ABLE)){
         return pool;
     }
     //计算权重
@@ -344,7 +350,136 @@ int CatchService::countChance(int studentId,QList<int>idPool)
 int CatchService::getCatchProbability(int studentId)
 {
     int persent = 0;
-    QList<int> pool = makeStudentIdPool();
+    QList<int> pool = makeStudentIdPool(true);
     persent = countChance(studentId,pool);
     return persent;
+}
+
+QString CatchService::getAllDataToJson()
+{
+    QString data;
+    int classId = StudentService::getInstance()->getNowClassId();
+    data = updateFileData(classId,studentIdPool2);
+    return data;
+}
+
+void CatchService::loadFileData(QList<int > &studentPool)
+{
+    QJsonArray dataArray;
+    int classId = StudentService::getInstance()->getNowClassId();
+    QJsonDocument dt = QJsonDocument::fromJson(FileService::getInstance()->loadCatch());
+    OptionClass option = OptionService::getInstance()->getOption();
+    if(!dt.isArray()){
+        qDebug()<<"["<<serviceName<<"]"<<tr("fail to load json data");
+        return;
+    }
+    if(classId<0){
+        qDebug()<<"["<<serviceName<<"]"<<tr("no selected class");
+        return;
+    }
+    dataArray = dt.array();
+    for(int i = 0;i<dataArray.count();i++){
+        if(!dataArray[i].isObject()){
+            continue;
+        }
+        QJsonObject dataItem = dataArray[i].toObject();
+        if(dataItem["classId"].toInt() != classId){
+            continue;
+        }
+        if(dataItem["gender"].toInt() != option.getGender()){
+            continue;
+        }
+        QJsonArray studentIdArray = dataItem["studentId"].toArray();
+        for(int j = 0;j<studentIdArray.count();j++){
+            studentPool.push_back(studentIdArray[j].toInt());
+        }
+    }
+    for(int i = 0;i<studentPool.count();i++){
+        if(StudentService::getInstance()->checkStudentExist(studentPool[i])){
+            continue;
+        }
+        studentPool.remove(i);
+        i--;
+    }
+}
+
+QString CatchService::updateFileData(int classId,QList<int > &studentPool)
+{
+    QJsonArray ndataArray;
+    QJsonDocument dt = QJsonDocument::fromJson(FileService::getInstance()->loadCatch());
+    QJsonObject ndataItem;
+    QJsonArray studentArray;
+    OptionClass option = OptionService::getInstance()->getOption();
+    bool existFlag;
+    if(classId<0){
+        return "";
+    }
+    ndataItem.insert("classId",classId);
+    ndataItem.insert("gender",option.getGender());
+    for(int i = 0;i<studentPool.count();i++){
+        studentArray.append(studentPool[i]);
+    }
+    ndataItem.insert("studentId",studentArray);
+
+    if(!dt.isArray()){
+        qDebug()<<"["<<serviceName<<"]"<<tr("fail to load json data");
+
+        ndataArray.append(ndataItem);
+        dt.setArray(ndataArray);
+        return QString::fromUtf8(dt.toJson(QJsonDocument::Compact));
+    }
+    QJsonArray dataArray = dt.array();
+    existFlag = false;
+    for(int i = 0;i<dataArray.count();i++){
+        if(!dataArray[i].isObject()){
+            continue;
+        }
+        QJsonObject dataItem = dataArray[i].toObject();
+        if(dataItem["classId"] != StudentService::getInstance()->getNowClassId()){
+            ndataArray.append(dataItem);
+            continue;
+        }
+        existFlag = true;
+        ndataArray.append(ndataItem);
+    }
+    if(!existFlag){
+        ndataArray.append(ndataItem);
+    }
+    dt.setArray(ndataArray);
+    return QString::fromUtf8(dt.toJson(QJsonDocument::Compact));
+}
+
+QString CatchService::deleteFileData(int classId)
+{
+    QJsonArray ndataArray;
+    QJsonDocument dt = QJsonDocument::fromJson(FileService::getInstance()->loadCatch());
+    if(!dt.isArray()){
+        qDebug()<<"["<<serviceName<<"]"<<tr("fail to load json data");
+        return "";
+    }
+    QJsonArray dataArray = dt.array();
+    for(int i = 0;i<dataArray.count();i++){
+        if(!dataArray[i].isObject()){
+            continue;
+        }
+        QJsonObject dataItem = dataArray[i].toObject();
+        if(dataItem["classId"] != StudentService::getInstance()->getNowClassId()){
+            ndataArray.append(dataItem);
+            continue;
+        }
+    }
+    if(ndataArray.count()){
+        dt.setArray(ndataArray);
+        return QString::fromUtf8(dt.toJson(QJsonDocument::Compact));
+    }else{
+        return "";
+    }
+}
+
+QString CatchService::getDeleteClassDataToJson(int classId)
+{
+    QString data;
+    data = deleteFileData(classId);
+    return data;
+
 }

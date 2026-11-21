@@ -35,6 +35,7 @@ public:
     bool checkClassEmpty();
     void countSelect(int studentId);
     StudentClass getStudentDataById(int studentId);
+    bool checkStudentExist(int studentId);
 private:
     static StudentService * instance;
     QList<ClassClass> classList;

@@ -32,6 +32,9 @@ public:
     void addSelectStudentToList(int pos);
     QList<SelectStudentData> getSelectedStudentList();
     int getCatchProbability(int studentId);//计算下次抽取概率
+    QString getAllDataToJson();//获取保存Json数据
+    void loadFileData(QList<int > &studentPool);//载入文件保存数据
+    QString getDeleteClassDataToJson(int classId);//删除指定班抽取数据
 private:
     static CatchService * instance;
     int  moreCatchflag = 0;
@@ -41,13 +44,15 @@ private:
     QList<int>studentIdPool2;//单次不可重复抽取专用池
 private:
     explicit CatchService(QObject *parent = nullptr);
-    QList<int> makeStudentIdPool();//做成学生id抽取池
+    QList<int> makeStudentIdPool(bool needCatchTimesCheckFlag);//做成学生id抽取池
     SelectStudentData makeCatchStudentData(int studentId,QList<int>idPool);
     int countChance(int studentId,QList<int>idPool);
     QList<int> removeIdfromPool(int studentId,QList<int>idPool);
     void makeWeightListMinCount(QList<CatchWeight>&list,int keyNum,int selectTimes);
     void makeWeightListWeight(QList<CatchWeight>&list,int keyNum,int selectTimes);
     void makeWeightPool(QList<int>&idPool,QList<CatchWeight>&list,int studentId,int keyNum);
+    QString updateFileData(int classId,QList<int > &studentPool);//更新文件保存数据
+    QString deleteFileData(int classId);//删除文件保存数据
 signals:
     void signalCatchStudent(int pos,int studentId);
     void signalCatchStudentAdd(int studentId);
