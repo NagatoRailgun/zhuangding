@@ -3,6 +3,7 @@
 
 #include "studentservice/studentservice.h"
 #include "catchservice/catchservice.h"
+#include "catchnumberservice/catchnumberservice.h"
 #include "loadservice/loadservice.h"
 #include "fileservice/fileservice.h"
 #include "histroyservice/histroyservice.h"
@@ -46,6 +47,7 @@ void MainWindow::initService()
     serviceList.append(OptionService::getInstance());
     serviceList.append(StudentService::getInstance());
     serviceList.append(CatchService::getInstance());  
+    serviceList.append(CatchNumberService::getInstance());
     serviceList.append(LoadService::getInstance());
     serviceList.append(FileService::getInstance());
     serviceList.append(HistroyService::getInstance());

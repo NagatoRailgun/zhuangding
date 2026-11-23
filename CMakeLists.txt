@@ -60,6 +60,9 @@ set(PROJECT_SOURCES
         #抽丁服务
         service/catchservice/catchservice.h
         service/catchservice/catchservice.cpp
+        #抽号服务
+        service/catchnumberservice/catchnumberservice.h
+        service/catchnumberservice/catchnumberservice.cpp
         #学生服务
         service/studentservice/studentservice.h
         service/studentservice/studentservice.cpp

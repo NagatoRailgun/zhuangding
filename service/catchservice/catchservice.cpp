@@ -62,6 +62,14 @@ void CatchService::cleanWaitingData()
     studentIdPool2.clear();
 }
 
+int CatchService::getLastCatchStudentId()
+{
+    if(selectedStudentIdList.count()>0){
+        return selectedStudentIdList[selectedStudentIdList.count()-1].studentId;
+    }
+    return -1;
+}
+
 void CatchService::catch1Time()
 {
     int rnum;

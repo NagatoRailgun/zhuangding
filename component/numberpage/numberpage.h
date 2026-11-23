@@ -2,6 +2,8 @@
 #define NUMBERPAGE_H
 
 #include "basicpage/basicpage.h"
+#include "studentservice/studentservice.h"
+#include "catchnumberservice/catchnumberservice.h"
 
 namespace Ui {
 class NumberPage;
@@ -15,9 +17,16 @@ public:
     ~NumberPage();
 private:
     Ui::NumberPage *ui;
+    StudentService * serviceStudent = nullptr;
+    CatchNumberService * serviceCatchNumber = nullptr;
+    int selectedStudentId = -1;
+    int selectedStudentPos = -1;
 private:
     void initService() override;
     void connectSignal() override;
+    void loadStudentNumber();
+private slots:
+    void signalNowClassChangeSlot(int classId);
 };
 
 #endif // NUMBERPAGE_H

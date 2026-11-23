@@ -37,6 +37,7 @@ public:
     void loadFileData(QList<int > &studentPool);//载入文件保存数据
     QString getDeleteClassDataToJson(int classId);//删除指定班抽取数据
     void afterChangeClass();//载入文件保存数据
+    int getLastCatchStudentId();
 private:
     static CatchService * instance;
     int  moreCatchflag = 0;

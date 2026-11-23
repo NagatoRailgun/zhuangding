@@ -34,9 +34,9 @@ void CatchPage::connectSignal(){
     connect(&timer,SIGNAL(timeout()),this,SLOT(showNameSlot()));
 }
 
-void CatchPage::signalNowClassChangeSlot(int nowClassId)
+void CatchPage::signalNowClassChangeSlot(int classId)
 {
-    if(nowClassId<0){
+    if(classId<0){
         return;
     }
     loadStudentName();
@@ -130,7 +130,14 @@ void CatchPage::showOptionSlot()
 
 void CatchPage::loadStudentName()
 {
-    ui->label_2->setText(tr("Nobody"));
+    int studentId = serviceCatch->getLastCatchStudentId();
+    if(studentId<0){
+        ui->label_2->setText(tr("Nobody"));
+    }else{
+        selectedStudentId = studentId;
+        ui->label_5->setText(tr("No.")+QString::number(serviceStudent->getStudentShowId(selectedStudentId))+tr(" "));
+        ui->label_2->setText(serviceStudent->getStudentName(selectedStudentId));
+    }
 }
 
 void CatchPage::on_pushButton_clicked()
