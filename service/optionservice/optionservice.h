@@ -10,6 +10,7 @@ class OptionService : public BasicService
 public:
     ~OptionService();
     static OptionService *  getInstance(QObject * parent  = nullptr);
+    void initBasicData() override;
     void afterInitService() override;
     void beforeCloseService() override;
     void initOption();

@@ -80,7 +80,7 @@ void OptionPage::on_pushButton_clicked()
     int nowClassId = serviceStudent->getNowClassId();
     int newClassId = ui->comboBox->currentData().toInt();
     if( newClassId!= nowClassId){
-        serviceStudent->setNowClassId(newClassId);
+        serviceStudent->setNowClassIdWithOtherService(newClassId);
     }
     OptionClass options;
     if(ui->pushButton_3->isChecked()){

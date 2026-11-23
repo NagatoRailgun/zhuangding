@@ -30,6 +30,10 @@ FileService * FileService::getInstance(QObject * parent){
 
 FileService * FileService::instance = nullptr;
 
+void FileService::initBasicData()
+{
+
+}
 
 void FileService::afterInitService()
 {

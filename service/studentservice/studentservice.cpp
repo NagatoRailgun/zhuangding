@@ -29,8 +29,8 @@ StudentService * StudentService::getInstance(QObject * parent){
 
 StudentService * StudentService::instance = nullptr;
 
-
-void StudentService::afterInitService(){
+void StudentService::initBasicData()
+{
     if(FileService::getInstance()->checkDataFile()){
         qDebug()<<"["<<serviceName<<"]"<<tr("save data existed");
         loadFileData();
@@ -42,20 +42,31 @@ void StudentService::afterInitService(){
     setNowClassId(0);
 }
 
+void StudentService::afterInitService(){
+
+}
+
 void StudentService::beforeCloseService()
 {
     qDebug()<<"["<<serviceName<<"]"<<tr("service closing");
 }
 
-int StudentService::setNowClassId(int id)
+void StudentService::setNowClassIdWithOtherService(int classId)
+{
+    FileService::getInstance()->saveAllData();
+    setNowClassId(classId);
+    CatchService::getInstance()->afterChangeClass();
+}
+
+int StudentService::setNowClassId(int classId)
 {
     int exitFlag = 0;
     for(int i = 0;i<classList.count();i++){
         classList[i].setSelected(false);
     }
     for(int i = 0;i<classList.count();i++){
-        if(classList[i].getClassId() == id){
-            nowClassId = id;
+        if(classList[i].getClassId() == classId){
+            nowClassId = classId;
             classList[i].setSelected(true);
             qDebug()<<"["<<serviceName<<"]"<<tr("set now class id:")<<nowClassId<<","<<tr("name:")<<classList[i].getClassName();
             emit signalNowClassChange(nowClassId);
@@ -240,7 +251,7 @@ void StudentService::addClass(ClassClass newClass,QList<StudentClass>newStudent)
         studentList.push_back(newStudent[i]);
     }
     classList[pos].setStudentListPoint(&studentList);
-    setNowClassId(newClass.getClassId());
+    setNowClassIdWithOtherService(newClass.getClassId());
     emit signalClassChange();
 }
 
@@ -249,7 +260,7 @@ void StudentService::editClass(int classId,ClassClass newClass,QList<StudentClas
     qDebug()<<"["<<serviceName<<"]"<<tr("edit class id:")<<classId;
     deleteClass(classId);
     addClass(newClass,newStudent);
-    setNowClassId(nowClassId);
+    setNowClassIdWithOtherService(nowClassId);
     emit signalClassChange();
 }
 

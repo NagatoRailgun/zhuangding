@@ -9,6 +9,7 @@ class FileService : public BasicService
 public:
     ~FileService();
     static FileService *  getInstance(QObject * parent  = nullptr);
+    void initBasicData() override;
     void afterInitService() override;
     void beforeCloseService() override;
     void saveData();

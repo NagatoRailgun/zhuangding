@@ -50,6 +50,9 @@ void MainWindow::initService()
     serviceList.append(FileService::getInstance());
     serviceList.append(HistroyService::getInstance());
     for(int i = 0;i<serviceList.length();i++){
+        serviceList[i]->initBasicData();
+    }
+    for(int i = 0;i<serviceList.length();i++){
         serviceList[i]->afterInitService();
     }
 }

@@ -11,6 +11,7 @@ class LoadService : public BasicService
 public:
     ~LoadService();
     static LoadService *  getInstance(QObject * parent  = nullptr);
+    void initBasicData() override;
     void afterInitService() override;
     void beforeCloseService() override;
     void loadExcel(QString className,QString path);

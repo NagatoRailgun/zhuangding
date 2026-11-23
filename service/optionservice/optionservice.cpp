@@ -28,8 +28,7 @@ OptionService * OptionService::getInstance(QObject * parent){
 
 OptionService * OptionService::instance = nullptr;
 
-
-void OptionService::afterInitService()
+void OptionService::initBasicData()
 {
     if(FileService::getInstance()->checkOptionFile()){
         qDebug()<<"["<<serviceName<<"]"<<tr("save data existed");
@@ -38,6 +37,11 @@ void OptionService::afterInitService()
     }
     qDebug()<<"["<<serviceName<<"]"<<tr("save data not exist");
     initOption();
+}
+
+void OptionService::afterInitService()
+{
+
 }
 
 void OptionService::beforeCloseService()

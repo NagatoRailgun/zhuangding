@@ -25,6 +25,10 @@ HistroyService * HistroyService::getInstance(QObject * parent){
 
 HistroyService * HistroyService::instance = nullptr;
 
+void HistroyService::initBasicData()
+{
+
+}
 
 void HistroyService::afterInitService()
 {

@@ -18,6 +18,7 @@ public:
 public:
     ~HistroyService();
     static HistroyService *  getInstance(QObject * parent  = nullptr);
+    void initBasicData() override;
     void afterInitService() override;
     void beforeCloseService() override;
     QList<StudentClass> getHistroyData(DATA_TYPE type);

@@ -30,6 +30,10 @@ LoadService * LoadService::getInstance(QObject * parent){
 
 LoadService * LoadService::instance = nullptr;
 
+void LoadService::initBasicData()
+{
+
+}
 
 void LoadService::afterInitService(){
 

@@ -12,9 +12,9 @@ Q_OBJECT
 public:
     ~StudentService();
     static StudentService *  getInstance(QObject * parent  = nullptr);
+    void initBasicData() override;
     void afterInitService() override;
     void beforeCloseService() override;
-    int setNowClassId(int id);
     const int getNowClassId();
     const int getNowStudentNum();
     const QString getNowClassName();
@@ -36,6 +36,7 @@ public:
     void countSelect(int studentId);
     StudentClass getStudentDataById(int studentId);
     bool checkStudentExist(int studentId);
+    void setNowClassIdWithOtherService(int classId);
 private:
     static StudentService * instance;
     QList<ClassClass> classList;
@@ -46,8 +47,9 @@ private:
     void loadFileData();
     void loadTestClass();
     void loadTestStudent();
+    int setNowClassId(int classId);
 signals:
-    void signalNowClassChange(int nowClassId);
+    void signalNowClassChange(int classId);
     void signalClassChange();
 };
 

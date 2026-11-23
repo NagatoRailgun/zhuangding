@@ -9,6 +9,7 @@ class BasicService : public QObject
     Q_OBJECT
 public:
     explicit BasicService(QObject *parent = nullptr);
+    virtual void initBasicData() = 0;
     virtual void afterInitService() = 0;
     virtual void beforeCloseService() = 0;
 public:

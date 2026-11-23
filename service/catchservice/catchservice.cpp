@@ -31,8 +31,17 @@ CatchService * CatchService::getInstance(QObject * parent){
 
 CatchService * CatchService::instance = nullptr;
 
+void CatchService::initBasicData()
+{
+
+}
 
 void CatchService::afterInitService()
+{
+    afterChangeClass();
+}
+
+void CatchService::afterChangeClass()
 {
     cleanWaitingData();
     loadFileData(studentIdPool2);
